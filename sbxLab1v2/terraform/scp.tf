@@ -13,7 +13,7 @@
 #        }
 #    ]
 #}
-resource "aws_organizations_policy" "dont_leave" {
-	name = "tv2_prevent_leave_organization"
-	content = file("tv2_prevent_leave_organization.scp.json")
-}
+#resource "aws_organizations_policy" "dont_leave" {
+#	name = "tv2_prevent_leave_organization"
+#	content = file("tv2_prevent_leave_organization.scp.json")
+#}
