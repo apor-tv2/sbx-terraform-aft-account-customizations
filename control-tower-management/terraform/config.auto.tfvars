@@ -9,3 +9,5 @@ region = "eu-central-1"
 #sandbox_ou = [""]
 #labs_ou = ["ou-rzsy-6rzfb9hq"]
 targets = ["ou-rzsy-6rzfb9hq"]
+
+name = "protect-bucket"
