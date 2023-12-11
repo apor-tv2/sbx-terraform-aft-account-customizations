@@ -1,5 +1,6 @@
 ### Linux ###
 *~
+.*.swp
 
 # temporary files which can be created if a process still has a handle open of a deleted file
 .fuse_hidden*
@@ -199,7 +200,8 @@ crash.log
 # control as they are data points which are potentially sensitive and subject
 # to change depending on the environment.
 #
-*.tfvars
+#*.tfvars
+#!config.auto.tfvars
 
 # Ignore override files as they are usually used to override resources locally and so
 # are not checked in
