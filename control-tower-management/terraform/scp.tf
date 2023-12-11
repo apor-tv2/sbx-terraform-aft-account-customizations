@@ -1,9 +1,9 @@
-module "scp_labs" {
-	source = "./modules/scp"
-	for_each  = fileset(path.root, "policies/scp_labs/*.json")
-	json_file = each.value
-	ou_list   = var.sandbox_ou
-}
+#module "scp_labs" {
+#	source = "./modules/scp"
+#	for_each  = fileset(path.root, "policies/scp_labs/*.json")
+#	json_file = each.value
+#	ou_list   = var.sandbox_ou
+#}
 
 #module "scp_sandbox" {
 #	//source = "https://github.com/aws-samples/aws-scps-with-terraform.git"
