@@ -7,4 +7,5 @@ region = "eu-central-1"
 # any .json policy added to the correct directory in /policies will be applied
 #tenant_ou  = [""]
 #sandbox_ou = [""]
-labs_ou = ["ou-rzsy-6rzfb9hq"]
+#labs_ou = ["ou-rzsy-6rzfb9hq"]
+targets = ["ou-rzsy-6rzfb9hq"]
