@@ -32,7 +32,7 @@
 #	content = file("tv2_prevent_leave_organization.scp.json")
 #}
 
-data "aws_iam_policy_document" "scp_policy_original" {
+data "aws_iam_policy_document" "scp_policy" {
 
   # Root account access
   dynamic "statement" {
