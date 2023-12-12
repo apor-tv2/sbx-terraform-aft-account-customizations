@@ -16,16 +16,16 @@
 #  type        = list(string)
 #}
 
-#variable "name" {
-#  description = "SCP name"
-#  type        = string
-#}
-#
-#variable "targets" {
-#  description = "Lits of OU and account id's to attach SCP"
-#  type        = set(string)
-#  default     = []
-#}
+variable "name" {
+  description = "SCP name"
+  type        = string
+}
+
+variable "targets" {
+  description = "Lits of OU and account id's to attach SCP"
+  type        = set(string)
+  default     = []
+}
 
 # SCP targets - i.e. the OUs in our AWS Organization
 variable "ou_targets" {
