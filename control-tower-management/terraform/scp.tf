@@ -209,16 +209,16 @@ resource "aws_organizations_policy" "scp_document" {
 #  target_id = each.value
 #}
 
-#module "scp-labs" {
-#  source  = "../"
-#  targets = toset([var.ou_targets.labs])
-#  name    = "labs"
-#
-##  deny_root_account_access     = false
-##  deny_password_policy_changes = false
-##  deny_vpn_gateway_changes     = false
-##  deny_vpc_changes             = false
-##  deny_config_changes          = false
-##  deny_cloudtrail_changes      = false
-#  deny_delete_s3_bucket_statement = true
-#}
+module "scp-labs" {
+  source  = "../"
+  targets = toset([var.ou_targets.labs])
+  name    = "labs"
+
+#  deny_root_account_access     = false
+#  deny_password_policy_changes = false
+#  deny_vpn_gateway_changes     = false
+#  deny_vpc_changes             = false
+#  deny_config_changes          = false
+#  deny_cloudtrail_changes      = false
+  deny_delete_s3_bucket_statement = true
+}
