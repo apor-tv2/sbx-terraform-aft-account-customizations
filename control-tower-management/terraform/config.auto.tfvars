@@ -10,4 +10,4 @@ region = "eu-central-1"
 #labs_ou = ["ou-rzsy-6rzfb9hq"]
 targets = ["ou-rzsy-6rzfb9hq"]
 
-name = "protect-bucket"
+name = "labs_scp_document"
