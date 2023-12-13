@@ -1,245 +1,47 @@
-#module "scp_labs" {
-#	source = "./modules/scp"
-#	for_each  = fileset(path.root, "policies/scp_labs/*.json")
-#	json_file = each.value
-#	ou_list   = var.sandbox_ou
+# data "aws_iam_policy_document" "scp_policy_dynamic" {
+# 
+#   # Root account access
+#   dynamic "statement" {
+#     for_each = local.deny_root_account_access_statement
+#     content {
+#       actions   = ["*"]
+#       resources = ["*"]
+#       effect    = "Deny"
+#       condition {
+#         test     = "StringLike"
+#         variable = "aws:PrincipalArn"
+#         values   = ["arn:aws:iam::*:root"]
+#       }
+#     }
+#   }
 #}
-
-#module "scp_sandbox" {
-#	//source = "https://github.com/aws-samples/aws-scps-with-terraform.git"
-#	source = "./modules/scp"
-#	for_each  = fileset(path.root, "policies/scp_sandbox/*.json")
-#	json_file = each.value
-#	ou_list   = var.sandbox_ou
+#resource "aws_organizations_policy" "scp_dynamic" {
+#  name    = "Deny Root Account Access"
+#  content = data.aws_iam_policy_document.scp_policy_dynamic.json
 #}
-
-
-#{
-#    "Version": "2012-10-17",
-#    "Statement": [
-#        {
-#            "Action": [
-#                "organizations:LeaveOrganization"
-#            ],
-#            "Resource": "*",
-#            "Effect": "Deny"
-#        }
-#    ]
-#}
-
-#resource "aws_organizations_policy" "dont_leave" {
-#	name = "tv2_prevent_leave_organization"
-#	content = file("tv2_prevent_leave_organization.scp.json")
-#}
-
-data "aws_iam_policy_document" "scp_policy" {
-
-  # Root account access
-  dynamic "statement" {
-    for_each = local.deny_root_account_access_statement
-    content {
-      actions   = ["*"]
-      resources = ["*"]
-      effect    = "Deny"
-      condition {
-        test     = "StringLike"
-        variable = "aws:PrincipalArn"
-        values   = ["arn:aws:iam::*:root"]
-      }
-    }
-  }
-
-  # IAM password policy changes
-  dynamic "statement" {
-    for_each = local.deny_password_policy_changes_statement
-    content {
-      actions = [
-        "iam:DeleteAccountPasswordPolicy",
-        "iam:UpdateAccountPasswordPolicy"
-      ]
-      resources = ["*"]
-      effect    = "Deny"
-      condition {
-        test     = "ForAnyValue:ArnNotLike"
-        variable = "aws:PrincipalArn"
-        values = [
-          "arn:aws:iam::*:role/Deploy"
-        ]
-      }
-    }
-  }
-
-
-  # AMI
-  dynamic "statement" {
-    for_each = local.deny_vpn_gateway_changes_statement
-    content {
-      effect = "Deny"
-      actions = [
-        "ec2:DetachVpnGateway",
-        "ec2:AttachVpnGateway",
-        "ec2:DeleteVpnGateway",
-        "ec2:CreateVpnGateway"
-      ]
-      resources = [
-        "arn:aws:ec2:*:*:vpn-gateway/*",
-        "arn:aws:ec2:*:*:vpc/*"
-      ]
-      condition {
-        test     = "ForAnyValue:ArnNotLike"
-        variable = "aws:PrincipalArn"
-        values = [
-          "arn:aws:iam::*:role/NetworkAdmin",
-        ]
-      }
-    }
-  }
-
-
-  # Deny Network changes
-  #
-  dynamic "statement" {
-    for_each = local.deny_vpc_changes_statement
-    content {
-      effect = "Deny"
-      actions = [
-        "ec2:DeleteFlowLogs",
-        "ec2:ModifyVpc*",
-        "ec2:CreateVpc*",
-        "ec2:DeleteVpc*",
-        "ec2:AcceptVpcPeeringConnection",
-        "ec2:DisassociateVpcCidrBlock"
-      ]
-      resources = [
-        "*"
-      ]
-      condition {
-        test     = "ForAnyValue:ArnNotLike"
-        variable = "aws:PrincipalArn"
-        values = [
-          "arn:aws:iam::*:role/NetworkAdmin",
-        ]
-      }
-    }
-  }
-
-
-  # Config changes for core
-  dynamic "statement" {
-    for_each = local.deny_config_changes_statement
-    content {
-      effect = "Deny"
-      actions = [
-        "config:DeleteConfigurationRecorder",
-        "config:DeleteDeliveryChannel",
-        "config:DeleteRetentionConfiguration",
-        "config:PutConfigurationRecorder",
-        "config:PutDeliveryChannel",
-        "config:PutRetentionConfiguration",
-        "config:StopConfigurationRecorder"
-      ]
-      resources = ["*"]
-      condition {
-        test     = "ForAnyValue:ArnNotLike"
-        variable = "aws:PrincipalArn"
-        values = [
-          "arn:aws:iam::*:role/Deploy"
-        ]
-      }
-    }
-  }
-
-
-  # Deny Cloud Trail changes
-  dynamic "statement" {
-    for_each = local.deny_cloudtrail_changes_statement
-    content {
-      effect = "Deny"
-      actions = [
-        "cloudtrail:DeleteTrail",
-        "cloudtrail:UpdateTrail",
-        "cloudtrail:PutEventSelectors",
-        "cloudtrail:StopLogging"
-      ]
-      resources = ["arn:aws:cloudtrail:*:*:trail/*"]
-      condition {
-        test     = "ForAnyValue:ArnNotLike"
-        variable = "aws:PrincipalArn"
-        values = [
-          "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/Deploy"
-        ]
-      }
-    }
-  }
-
-  # Deny Delete S3 Bucket
-  dynamic "statement" {
-    for_each = local.deny_delete_s3_bucket_statement
-    content {
-      effect = "Deny"
-      actions = [
-                  "s3:DeleteBucket", 
-                  "s3:DeleteBucketPolicy", 
-                  "s3:DeleteObject", 
-                  "s3:DeleteObjectVersion", 
-                  "s3:DeleteObjectTagging", 
-                  "s3:DeleteObjectVersionTagging" 
-      ]
-      resources = [
-                  "arn:aws:s3:::[bucket]", 
-                  "arn:aws:s3:::[bucket]/*" 
-	]
-    }
-  }
-}
-
-## Generate the SCP Policy
-resource "aws_organizations_policy" "scp_document" {
-  #name        = var.name
-  name        = "test-scp"
-  #description = "${var.name} : SCP generated by org-scp module"
-  description = "test-scp : SCP generated by org-scp module"
-  type = "SERVICE_CONTROL_POLICY"
-  #content     = data.aws_iam_policy_document.scp_policy.json
-  content = <<CONTENT
-{
-	"Version": "2012-10-17",
-	"Statement": [
-		{
-			"Sid": "DenyLeaveOrganization",
-			"Effect": "Deny",
-			"Action": ["organizations:LeaveOrganization"],
-			"Resource": ["*"]
-		},
-		{
-			"Sid": "DenyUpdateBilling",
-			"Effect": "Deny",
-			"Action": ["billing:UpdateBillingPreferences"],
-			"Resource": ["*"]
-		}
-	]
-}
-CONTENT
-
-}
-
-## Create the attachment for the targets
-#resource "aws_organizations_policy_attachment" "scp_attachment" {
-#  for_each  = var.targets
-#  policy_id = aws_organizations_policy.scp_document.id
-#  target_id = each.value
-#}
-
-#module "scp-labs" {
-#  source  = "../"
-#  targets = toset([var.ou_targets.labs])
-#  name    = "labs"
 #
-##  deny_root_account_access     = false
-##  deny_password_policy_changes = false
-##  deny_vpn_gateway_changes     = false
-##  deny_vpc_changes             = false
-##  deny_config_changes          = false
-##  deny_cloudtrail_changes      = false
-#  deny_delete_s3_bucket_statement = true
+#data "aws_iam_policy_document" "example" {
+#  statement {
+#    effect    = "Allow"
+#    actions   = ["*"]
+#    resources = ["*"]
+#  }
 #}
+#
+#resource "aws_organizations_policy" "example" {
+#  name    = "Deny Nothing"
+#  content = data.aws_iam_policy_document.example.json
+#}
+
+module "scp-sbx-labs" {
+	source = "./modules/org_scp/"
+	#targets = toset(["foo"],["bar"])
+	targets = toset([var.ou_targets.labs])
+	name = "scp-labs"
+	deny_root_account_access     = true
+	deny_password_policy_changes = true
+	deny_vpn_gateway_changes     = true
+	deny_vpc_changes             = true
+	deny_config_changes          = true
+	deny_cloudtrail_changes      = true
+}
