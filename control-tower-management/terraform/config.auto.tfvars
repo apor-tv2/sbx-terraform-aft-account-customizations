@@ -8,6 +8,6 @@
 #tenant_ou  = [""]
 #sandbox_ou = [""]
 #labs_ou = ["ou-rzsy-6rzfb9hq"]
-targets = ["ou-rzsy-6rzfb9hq"]
+#targets = ["ou-rzsy-6rzfb9hq"]
 
-name = "labs_scp_document"
+#name = "labs_scp_document"
