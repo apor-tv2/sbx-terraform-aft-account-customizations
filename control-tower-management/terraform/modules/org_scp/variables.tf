@@ -47,3 +47,9 @@ variable "deny_cloudtrail_changes" {
   default     = false
   type        = bool
 }
+
+variable "deny_leave_organization_and_change_billing" {
+  description = "Deny Leave Organization and Change Billing"
+  default     = false
+  type        = bool
+}
