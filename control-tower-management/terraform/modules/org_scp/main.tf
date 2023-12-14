@@ -170,7 +170,5 @@ resource "aws_organizations_policy" "scp_document" {
 resource "aws_organizations_policy_attachment" "scp_attachment" {
   for_each  = var.targets
   policy_id = aws_organizations_policy.scp_document.id
-  sid  = "targets"
-  sid  = "targets"
   target_id = each.value
 }
