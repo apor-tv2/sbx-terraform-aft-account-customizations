@@ -154,7 +154,7 @@ data "aws_iam_policy_document" "scp_policy" {
         "organizations:LeaveOrganization",
         "billing:UpdateBillingPreferences"
       ]
-      resource = "*"
+      resources = ["*"]
     }
   }
 }
