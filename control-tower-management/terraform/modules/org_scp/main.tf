@@ -4,6 +4,7 @@ data "aws_iam_policy_document" "scp_policy" {
   dynamic "statement" {
     for_each = local.deny_root_account_access_statement
     content {
+      sid = "deny root account access"
       actions   = ["*"]
       resources = ["*"]
       effect    = "Deny"
@@ -19,6 +20,7 @@ data "aws_iam_policy_document" "scp_policy" {
   dynamic "statement" {
     for_each = local.deny_password_policy_changes_statement
     content {
+      sid = "deny password policy changes"
       actions = [
         "iam:DeleteAccountPasswordPolicy",
         "iam:UpdateAccountPasswordPolicy"
@@ -40,6 +42,7 @@ data "aws_iam_policy_document" "scp_policy" {
   dynamic "statement" {
     for_each = local.deny_vpn_gateway_changes_statement
     content {
+	    sid = "deny vpn gateway changes"
       effect = "Deny"
       actions = [
         "ec2:DetachVpnGateway",
@@ -66,7 +69,8 @@ data "aws_iam_policy_document" "scp_policy" {
   #
   dynamic "statement" {
     for_each = local.deny_vpc_changes_statement
-    content {
+    content { 
+			sid = "deny vpc changes"
       effect = "Deny"
       actions = [
         "ec2:DeleteFlowLogs",
@@ -94,6 +98,7 @@ data "aws_iam_policy_document" "scp_policy" {
   dynamic "statement" {
     for_each = local.deny_config_changes_statement
     content {
+			sid = "deny config changes"
       effect = "Deny"
       actions = [
         "config:DeleteConfigurationRecorder",
@@ -120,6 +125,7 @@ data "aws_iam_policy_document" "scp_policy" {
   dynamic "statement" {
     for_each = local.deny_cloudtrail_changes_statement
     content {
+			sid = "deny cloudtrail changes"
       effect = "Deny"
       actions = [
         "cloudtrail:DeleteTrail",
@@ -138,8 +144,20 @@ data "aws_iam_policy_document" "scp_policy" {
     }
   }
 
+  # Deny Leave Organization and Change BillingPreferences
+  dynamic "statement" {
+    for_each = local.deny_leave_organization_and_change_billing_statement
+    content {
+      sid = "deny leave organization and change billing"
+      effect = "Deny"
+      actions = [
+        "organizations:LeaveOrganization",
+        "billing:UpdateBillingPreferences"
+      ]
+      resource = "*"
+    }
+  }
 }
-
 
 # Generate the SCP Policy
 resource "aws_organizations_policy" "scp_document" {
@@ -152,5 +170,7 @@ resource "aws_organizations_policy" "scp_document" {
 resource "aws_organizations_policy_attachment" "scp_attachment" {
   for_each  = var.targets
   policy_id = aws_organizations_policy.scp_document.id
+  sid  = "targets"
+  sid  = "targets"
   target_id = each.value
 }

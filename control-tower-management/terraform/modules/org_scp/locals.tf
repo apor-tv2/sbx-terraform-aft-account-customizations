@@ -5,4 +5,5 @@ locals {
   deny_vpc_changes_statement             = var.deny_vpc_changes ? [""] : []
   deny_config_changes_statement          = var.deny_config_changes ? [""] : []
   deny_cloudtrail_changes_statement      = var.deny_cloudtrail_changes ? [""] : []
+  deny_leave_organization_and_change_billing_statement  = var.deny_leave_organization_and_change_billing ? [""] : []
 }
