@@ -4,6 +4,7 @@ locals {
   deny_vpn_gateway_changes_statement     = var.deny_vpn_gateway_changes ? [""] : []
   deny_vpc_changes_statement             = var.deny_vpc_changes ? [""] : []
   deny_config_changes_statement          = var.deny_config_changes ? [""] : []
+  # ^5
   deny_cloudtrail_changes_statement      = var.deny_cloudtrail_changes ? [""] : []
   deny_leave_organization_and_change_billing_statement  = var.deny_leave_organization_and_change_billing ? [""] : []
 }

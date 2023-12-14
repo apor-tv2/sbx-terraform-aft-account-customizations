@@ -8,6 +8,7 @@ module "scp-sbx-labs" {
 	deny_vpn_gateway_changes     = true
 	deny_vpc_changes             = true
 	deny_config_changes          = true
+	# ^5
 	deny_cloudtrail_changes      = true
-	deny_leave_organization_and_change_billing_statement  = true
+	deny_leave_organization_and_change_billing = true
 }
