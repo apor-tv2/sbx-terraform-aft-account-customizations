@@ -4,7 +4,7 @@ data "aws_iam_policy_document" "scp_policy" {
   dynamic "statement" {
     for_each = local.deny_root_account_access_statement
     content {
-#      sid = "deny root account access"
+      sid = "DenyRootAccountAccess"
       actions   = ["*"]
       resources = ["*"]
       effect    = "Deny"
@@ -20,7 +20,7 @@ data "aws_iam_policy_document" "scp_policy" {
   dynamic "statement" {
     for_each = local.deny_password_policy_changes_statement
     content {
-#      sid = "deny password policy changes"
+      sid = "DenyPasswordPolicyChanges"
       actions = [
         "iam:DeleteAccountPasswordPolicy",
         "iam:UpdateAccountPasswordPolicy"
@@ -42,7 +42,7 @@ data "aws_iam_policy_document" "scp_policy" {
   dynamic "statement" {
     for_each = local.deny_vpn_gateway_changes_statement
     content {
-#	    sid = "deny vpn gateway changes"
+      sid = "DenyVpnGatewayChanges"
       effect = "Deny"
       actions = [
         "ec2:DetachVpnGateway",
@@ -69,7 +69,7 @@ data "aws_iam_policy_document" "scp_policy" {
   dynamic "statement" {
     for_each = local.deny_vpc_changes_statement
     content { 
-#	sid = "deny vpc changes"
+      sid = "DenyVpcChanges"
       effect = "Deny"
       actions = [
         "ec2:DeleteFlowLogs",
@@ -97,7 +97,7 @@ data "aws_iam_policy_document" "scp_policy" {
   dynamic "statement" {
     for_each = local.deny_config_changes_statement
     content {
-#			sid = "deny config changes"
+      sid = "DenyConfigChanges"
       effect = "Deny"
       actions = [
         "config:DeleteConfigurationRecorder",
@@ -124,7 +124,7 @@ data "aws_iam_policy_document" "scp_policy" {
   dynamic "statement" {
     for_each = local.deny_cloudtrail_changes_statement
     content {
-#			sid = "deny cloudtrail changes"
+      sid = "DenyCloudtrailChanges"
       effect = "Deny"
       actions = [
         "cloudtrail:DeleteTrail",
@@ -147,7 +147,7 @@ data "aws_iam_policy_document" "scp_policy" {
   dynamic "statement" {
     for_each = local.deny_leave_organization_and_change_billing_statement
     content {
-#      sid = "deny leave organization and change billing"
+      sid = "DenyLeaveOrganizationAndChangeBilling"
       effect = "Deny"
       actions = [
         "organizations:LeaveOrganization",
