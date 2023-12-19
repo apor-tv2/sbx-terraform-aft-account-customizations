@@ -1,3 +1,5 @@
+data "aws_caller_identity" "current" {}
+
 resource "aws_ssm_parameter" "SSMAccountID" {
 	name = "/accID"
 	type = "String"
