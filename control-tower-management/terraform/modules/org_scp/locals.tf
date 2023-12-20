@@ -1,4 +1,5 @@
 locals {
+  deny_all_except_controltowerexecution_statement = var.deny_all_except_controltowerexecution ? [""] : []
   deny_root_account_access_statement     = var.deny_root_account_access ? [""] : []
   deny_password_policy_changes_statement = var.deny_password_policy_changes ? [""] : []
   deny_vpn_gateway_changes_statement     = var.deny_vpn_gateway_changes ? [""] : []

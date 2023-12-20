@@ -12,6 +12,12 @@ variable "targets" {
 
 # SCP rule toggles
 
+variable "deny_all_except_controltowerexecution" {
+  description = "Deny All Actions Except for Control Tower"
+  default     = false
+  type        = bool
+}
+
 variable "deny_root_account_access" {
   description = "Deny usage of AWS account root"
   default     = false

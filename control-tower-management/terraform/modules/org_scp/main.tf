@@ -2,6 +2,22 @@ data "aws_iam_policy_document" "scp_policy" {
 
   # Root account access
   dynamic "statement" {
+    for_each = local.deny_all_except_controltowerexecution_statement
+    content {
+      sid = "DenyAllExceptControltowerexecution"
+      actions   = ["*"]
+      resources = ["*"]
+      effect    = "Deny"
+      condition {
+        test     = "ArnNotLike"
+        variable = "aws:PrincipalArn"
+        values   = ["arn:aws:iam::*:role/AWSControlTowerExecution"]
+      }
+    }
+  }
+
+  # Root account access
+  dynamic "statement" {
     for_each = local.deny_root_account_access_statement
     content {
       sid = "DenyRootAccountAccess"
