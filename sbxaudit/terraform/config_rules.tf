@@ -10,13 +10,13 @@ resource "aws_config_config_rule" "r" {
   depends_on = [aws_config_configuration_recorder.foo]
 }
 
-#resource "aws_config_configuration_recorder" "foo" {
-#  name     = "example"
-#  role_arn = aws_iam_role.r.arn
-#}
 import {
   to = aws_config_configuration_recorder.foo
   id = "aws-controltower-GuardrailsComplianceAggregator"
+}
+resource "aws_config_configuration_recorder" "foo" {
+  name     = "example"
+  role_arn = aws_iam_role.r.arn
 }
 
 data "aws_iam_policy_document" "assume_role" {
