@@ -15,27 +15,27 @@ import {
   #id = "aws-controltower-GuardrailsComplianceAggregator"
   id = "aws-controltower-BaselineConfigRecorder"
 }
-#resource "aws_config_configuration_recorder" "foo" {
-#  name     = "aws-controltower-BaselineConfigRecorder"
-#  role_arn = aws_iam_role.r.arn
-#  recording_group {
-#    all_supported = true
-#    include_global_resource_types = true # conflicts with resource_types
+resource "aws_config_configuration_recorder" "foo" {
+  name     = "aws-controltower-BaselineConfigRecorder"
+  role_arn = aws_iam_role.r.arn
+  recording_group {
+    all_supported = true
+    include_global_resource_types = true # conflicts with resource_types
+
+#    resource_types = []
 #
-##    resource_types = []
-##
-##    exclusion_by_resource_types {
-##      #resource_types = ["AWS::EC2::Instance"]
-##      resource_types = []
-##    }
-##
-##    recording_strategy {
-##      use_only = "ALL_SUPPORTED_RESOURCE_TYPES"
-##      #use_only = "EXCLUSION_BY_RESOURCE_TYPES"
-##    }
-#  }
-#  # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/config_configuration_recorder#argument-reference
-#}
+#    exclusion_by_resource_types {
+#      #resource_types = ["AWS::EC2::Instance"]
+#      resource_types = []
+#    }
+#
+#    recording_strategy {
+#      use_only = "ALL_SUPPORTED_RESOURCE_TYPES"
+#      #use_only = "EXCLUSION_BY_RESOURCE_TYPES"
+#    }
+  }
+  # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/config_configuration_recorder#argument-reference
+}
 
 data "aws_iam_policy_document" "assume_role" {
   statement {
