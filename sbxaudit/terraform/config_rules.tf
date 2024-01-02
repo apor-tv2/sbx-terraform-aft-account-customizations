@@ -7,7 +7,7 @@ resource "aws_config_config_rule" "r" {
     source_identifier = "S3_BUCKET_VERSIONING_ENABLED"
   }
 
-  depends_on = [aws_config_configuration_recorder.foo]
+#  depends_on = [aws_config_configuration_recorder.foo]
 }
 
 import {
