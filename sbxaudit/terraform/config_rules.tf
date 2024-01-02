@@ -16,11 +16,13 @@ import {
   id = "aws-controltower-BaselineConfigRecorder"
 }
 resource "aws_config_configuration_recorder" "foo" {
-  name     = "example"
+  name     = "aws-controltower-BaselineConfigRecorder"
   role_arn = aws_iam_role.r.arn
   recording_group {
     all_supported = true
     include_global_resource_types = true # conflicts with resource_types
+
+    resource_types = []
 
     exclusion_by_resource_types {
       #resource_types = ["AWS::EC2::Instance"]
