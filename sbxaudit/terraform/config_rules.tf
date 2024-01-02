@@ -12,7 +12,8 @@ resource "aws_config_config_rule" "r" {
 
 import {
   to = aws_config_configuration_recorder.foo
-  id = "aws-controltower-GuardrailsComplianceAggregator"
+  #id = "aws-controltower-GuardrailsComplianceAggregator"
+  id = "aws-controltower-BaselineConfigRecorder"
 }
 resource "aws_config_configuration_recorder" "foo" {
   name     = "example"
