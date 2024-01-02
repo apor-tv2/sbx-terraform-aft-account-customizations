@@ -17,7 +17,9 @@ import {
 }
 resource "aws_config_configuration_recorder" "foo" {
   name     = "aws-controltower-BaselineConfigRecorder"
-  role_arn = aws_iam_role.r.arn
+  #role_arn = aws_iam_role.r.arn
+  #role_arn = "arn:aws:iam::996514947915:role/aws-service-role/config.amazonaws.com/AWSServiceRoleForConfig"
+  role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/config.amazonaws.com/AWSServiceRoleForConfig"
   recording_group {
     all_supported = true
     include_global_resource_types = true # conflicts with resource_types
