@@ -6,9 +6,56 @@ resource "aws_config_config_rule" "TV2Policy-S3_BUCKET_VERSIONING_ENABLED" {
     owner             = "AWS"
     source_identifier = "S3_BUCKET_VERSIONING_ENABLED"
   }
-  #depends_on = [aws_config_configuration_recorder.aws-controltower-BaselineConfigRecorder]
-  depends_on = [aws_config_configuration_recorder.foo]
+  depends_on = [aws_config_configuration_recorder.aws-controltower-BaselineConfigRecorder]
+  #depends_on = [aws_config_configuration_recorder.foo]
 }
-# AWSControlTower-AWS-GR_AUDIT_BUCKET_PUBLIC_READ_PROHIBITED
-#acm-certificate-expiration-check
-#iam-password-policy
+
+resource "aws_config_config_rule" "TV2Policy-MFA_ENABLED_FOR_IAM_CONSOLE_ACCESS" {
+  name = "TV2Policy-MFA_ENABLED_FOR_IAM_CONSOLE_ACCESS"
+
+  source {
+    owner             = "AWS"
+    source_identifier = "MFA_ENABLED_FOR_IAM_CONSOLE_ACCESS"
+  }
+  depends_on = [aws_config_configuration_recorder.aws-controltower-BaselineConfigRecorder]
+}
+
+resource "aws_config_config_rule" "TV2Policy-MFA_ENABLED_FOR_IAM_CONSOLE_ACCESS" {
+  name = "TV2Policy-MFA_ENABLED_FOR_IAM_CONSOLE_ACCESS"
+
+  source {
+    owner             = "AWS"
+    source_identifier = "MFA_ENABLED_FOR_IAM_CONSOLE_ACCESS"
+  }
+  depends_on = [aws_config_configuration_recorder.aws-controltower-BaselineConfigRecorder]
+}
+
+resource "aws_config_config_rule" "TV2Policy-S3_BUCKET_PUBLIC_READ_PROHIBITED" {
+  name = "TV2Policy-S3_BUCKET_PUBLIC_READ_PROHIBITED"
+
+  source {
+    owner             = "AWS"
+    source_identifier = "S3_BUCKET_PUBLIC_READ_PROHIBITED"
+  }
+  depends_on = [aws_config_configuration_recorder.aws-controltower-BaselineConfigRecorder]
+}
+
+resource "aws_config_config_rule" "TV2Policy-S3_BUCKET_PUBLIC_WRITE_PROHIBITED" {
+  name = "TV2Policy-S3_BUCKET_PUBLIC_WRITE_PROHIBITED"
+
+  source {
+    owner             = "AWS"
+    source_identifier = "S3_BUCKET_PUBLIC_WRITE_PROHIBITED"
+  }
+  depends_on = [aws_config_configuration_recorder.aws-controltower-BaselineConfigRecorder]
+}
+
+#resource "aws_config_config_rule" "TV2Policy-TEMPLATE" {
+#  name = "TV2Policy-TEMPLATE"
+#
+#  source {
+#    owner             = "AWS"
+#    source_identifier = "TEMPLATE"
+#  }
+#  depends_on = [aws_config_configuration_recorder.aws-controltower-BaselineConfigRecorder]
+#}
