@@ -9,5 +9,5 @@ resource "aws_config_config_rule" "TV2Policy-S3_BUCKET_VERSIONING_ENABLED" {
   depends_on = [aws_config_configuration_recorder.aws-controltower-BaselineConfigRecorder]
 }
 # AWSControlTower-AWS-GR_AUDIT_BUCKET_PUBLIC_READ_PROHIBITED
-acm-certificate-expiration-check
-iam-password-policy
+#acm-certificate-expiration-check
+#iam-password-policy
