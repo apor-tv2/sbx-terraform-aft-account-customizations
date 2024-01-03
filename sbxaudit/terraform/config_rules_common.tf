@@ -1,3 +1,8 @@
+import {
+  to = aws_config_configuration_recorder.aws-controltower-BaselineConfigRecorder
+  #to = aws_config_configuration_recorder.foo
+  id = "aws-controltower-BaselineConfigRecorder"
+}
 resource "aws_config_configuration_recorder" "aws-controltower-BaselineConfigRecorder" {
   name     = "aws-controltower-BaselineConfigRecorder"
   role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/config.amazonaws.com/AWSServiceRoleForConfig"
