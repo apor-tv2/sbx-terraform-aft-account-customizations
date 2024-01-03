@@ -17,6 +17,8 @@ resource "aws_config_configuration_recorder" "aws-controltower-BaselineConfigRec
 #      #use_only = "EXCLUSION_BY_RESOURCE_TYPES"
 #    }
   }
+}
+
 import {
   #to = aws_config_configuration_recorder.aws-controltower-BaselineConfigRecorder
   to = aws_config_configuration_recorder.foo
