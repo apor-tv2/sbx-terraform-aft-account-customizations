@@ -10,5 +10,5 @@ module "scp-sbx-labs" {
 	deny_config_changes          = true
 	# ^5
 	deny_cloudtrail_changes      = true
-	deny_leave_organization_and_change_billing = false
+	deny_leave_organization_and_change_billing = true
 }
