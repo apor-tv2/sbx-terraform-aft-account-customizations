@@ -3,7 +3,7 @@ module "scp-sbx-labs" {
 	targets = toset([var.ou_targets.labs])
 	name = "scp-labs"
 	deny_all_except_controltowerexecution = false
-	deny_root_account_access     = false
+	deny_root_account_access     = true
 	deny_password_policy_changes = true
 	deny_vpn_gateway_changes     = false
 	deny_vpc_changes             = false
