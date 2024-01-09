@@ -1,7 +1,7 @@
-module "scp-sbx-labs" {
-	source = "./modules/org_scp/"
-	targets = toset([var.ou_targets.labs])
-	name = "scp-labs"
+module "scp-sbx-sandbox" {
+	source = "git::https://github.com/tv2/infrastructure-SCPs.git?ref=v1.0.0"
+	targets = toset([var.ou_targets.sandbox])
+	name = "scp-sandbox"
 	# Rule 1-5
 	deny_all_except_controltowerexecution = false
 	deny_root_account_access     = true

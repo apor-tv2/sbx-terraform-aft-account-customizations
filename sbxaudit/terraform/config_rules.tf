@@ -59,7 +59,3 @@ resource "aws_config_config_rule" "TV2Policy-S3_BUCKET_PUBLIC_WRITE_PROHIBITED" 
 #  }
 #  depends_on = [aws_config_configuration_recorder.aws-controltower-BaselineConfigRecorder]
 #}
-
-module "org-scps" {
-  source = "git::https://github.com/tv2/infrastructure-SCPs.git?ref=v1.0.0"
-}
