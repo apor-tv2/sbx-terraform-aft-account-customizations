@@ -21,6 +21,16 @@ resource "aws_config_config_rule" "TV2Policy-MFA_ENABLED_FOR_IAM_CONSOLE_ACCESS"
 }
 
 resource "aws_config_config_rule" "TV2Policy-IAM_USER_MFA_ENABLED" {
+  name = "TV2Policy-IAM_USER_MFA_ENABLED_TEST"
+
+  source {
+    owner             = "AWS"
+    source_identifier = "IAM_USER_MFA_ENABLED"
+  }
+  depends_on = [aws_config_configuration_recorder.foo]
+}
+
+resource "aws_config_config_rule" "TV2Policy-IAM_USER_MFA_ENABLED" {
   name = "TV2Policy-IAM_USER_MFA_ENABLED"
 
   source {
