@@ -1,4 +1,5 @@
 module "scp-sbx-labs" {
+	#source = "git::https://github.com/tv2/infrastructure-SCPs.git?ref=v1.0.1"
 	source = "./modules/org_scp/"
 	targets = toset([var.ou_targets.labs])
 	name = "scp-labs"
