@@ -1,7 +1,8 @@
 module "scp-sbx-sandbox" {
-	source = "https://git@github.com/apor-tv2/infrastructure-SCPs.git"
+	#source = "git::https://git@github.com/tv2/infrastructure-SCPs.git?ref=v1.0.1"
+	source = "git::https://git@github.com/tv2/infrastructure-SCPs.git"
+	#source = "https://git@github.com/apor-tv2/infrastructure-SCPs.git"
 	#source = "git::https://github.com/apor-tv2/infrastructure-SCPs.git"
-#	source = "git::https://github.com/tv2/infrastructure-SCPs.git?ref=v1.0.1"
 #source = "git@github.com:org/module"
 	#source = "./modules/org_scp/"
 	targets = toset([var.ou_targets.sandbox])
