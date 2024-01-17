@@ -1,7 +1,10 @@
 module "scp-sbx-sandbox" {
 	#source = "git::https://git@github.com/tv2/infrastructure-SCPs.git?ref=v1.0.1"
-	source = "git::https://git@github.com/tv2/infrastructure-SCPs.git"
-	#source = "https://git@github.com/apor-tv2/infrastructure-SCPs.git"
+	#source = "git::https://git@github.com/tv2/infrastructure-SCPs.git"
+
+	# test with a codestar connection from control-tower-account
+	source = "git::https://git@github.com/apor-tv2/infrastructure-SCPs.git"
+
 	#source = "git::https://github.com/apor-tv2/infrastructure-SCPs.git"
 #source = "git@github.com:org/module"
 	#source = "./modules/org_scp/"
