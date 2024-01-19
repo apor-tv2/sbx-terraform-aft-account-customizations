@@ -53,22 +53,24 @@ echo "ROLE_SESSION_NAME $ROLE_SESSION_NAME"
 #echo "git clone --quiet -b https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/infrastructure-SCPs"
 #git clone --quiet -b https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/infrastructure-SCPs
 
-export TF_VAR_CodestarGithubInfrastructureSCPsSource="https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git"
-echo "TF_VAR_CodestarGithubInfrastructureSCPsSource: $TF_VAR_CodestarGithubInfrastructureSCPsSource"
-tee $DEFAULT_PATH/$CUSTOMIZATION/terraform/Injected_CodestarGithubInfrastructureSCPsSource.tf <<-INJECT_CODESTAR_CONNECTION_INFO
-# Values injected from pre-api-helpers.sh
-variable "CodestarGithubInfrastructureSCPsSource" {
-	type = string
-	default = "https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git"
-	description = "Codestar Connection to checkout module source, will be set by pre-api-helper    s.sh in AFT account customization pipeline"
-}
-INJECT_CODESTAR_CONNECTION_INFO 
-cat <<-INJECT_CODESTAR_CONNECTION_INFO > $DEFAULT_PATH/$CUSTOMIZATION/terraform/Injected_CodestarGithubInfrastructureSCPsSource.tf
-# Values injected from pre-api-helpers.sh
-variable "CodestarGithubInfrastructureSCPsSource" {
-	type = string
-	default = "https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git"
-	description = "Codestar Connection to checkout module source, will be set by pre-api-helper    s.sh in AFT account customization pipeline"
-}
-INJECT_CODESTAR_CONNECTION_INFO 
-#echo "TEST=\"TF_VAR_TEST_SET_FROM_CONFIG_AUTO_TFVARS\"" >> $DEFAULT_PATH/$CUSTOMIZATION/terraform/config.auto.tfvars
+#export TF_VAR_CodestarGithubInfrastructureSCPsSource="https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git"
+#echo "TF_VAR_CodestarGithubInfrastructureSCPsSource: $TF_VAR_CodestarGithubInfrastructureSCPsSource"
+#tee $DEFAULT_PATH/$CUSTOMIZATION/terraform/Injected_CodestarGithubInfrastructureSCPsSource.tf <<-INJECT_CODESTAR_CONNECTION_INFO
+## Values injected from pre-api-helpers.sh
+#variable "CodestarGithubInfrastructureSCPsSource" {
+#	type = string
+#	default = "https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git"
+#	description = "Codestar Connection to checkout module source, will be set by pre-api-helper    s.sh in AFT account customization pipeline"
+#}
+#INJECT_CODESTAR_CONNECTION_INFO 
+
+#cat <<-INJECT_CODESTAR_CONNECTION_INFO > $DEFAULT_PATH/$CUSTOMIZATION/terraform/Injected_CodestarGithubInfrastructureSCPsSource.tf
+## Values injected from pre-api-helpers.sh
+#variable "CodestarGithubInfrastructureSCPsSource" {
+#	type = string
+#	default = "https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git"
+#	description = "Codestar Connection to checkout module source, will be set by pre-api-helper    s.sh in AFT account customization pipeline"
+#}
+#INJECT_CODESTAR_CONNECTION_INFO 
+
+echo "CodestarGithubInfrastructureSCPsSource=\"https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git\"" >> $DEFAULT_PATH/$CUSTOMIZATION/terraform/config.auto.tfvars
