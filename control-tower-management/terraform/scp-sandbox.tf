@@ -1,7 +1,16 @@
-variable "CodestarGithubInfrastructureSCPsSource" {
+variable "TEST" {
 	type = string
-	description = "Codestar Connection to checkout module source, will be set by pre-api-helpers as TF_VAR_CodestarGithubInfrastructureSCPsSource"
+	default = "Unset"
 }
+
+output "printtestvar"{
+	value = "${var.TEST}"
+}
+
+#variable "CodestarGithubInfrastructureSCPsSource" {
+#	type = string
+#	description = "Codestar Connection to checkout module source, will be set by pre-api-helpers as TF_VAR_CodestarGithubInfrastructureSCPsSource"
+#}
 
 #module "scp-sbx-sandbox" {
 #	source = var.CodestarGithubInfrastructureSCPsSource
