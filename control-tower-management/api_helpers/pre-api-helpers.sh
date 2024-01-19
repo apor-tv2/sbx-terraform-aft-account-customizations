@@ -49,8 +49,10 @@ echo "VENDED_EXEC_ROLE_ARN $VENDED_EXEC_ROLE_ARN"
 echo "AFT_ADMIN_ROLE_NAME $AFT_ADMIN_ROLE_NAME"
 echo "AFT_ADMIN_ROLE_ARN $AFT_ADMIN_ROLE_ARN"
 echo "ROLE_SESSION_NAME $ROLE_SESSION_NAME"
-echo "git clone --quiet -b https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/infrastructure-SCPs"
-git clone --quiet -b https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/infrastructure-SCPs
+
+#echo "git clone --quiet -b https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/infrastructure-SCPs"
+#git clone --quiet -b https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/infrastructure-SCPs
+
 export TF_VAR_CodestarGithubInfrastructureSCPsSource="https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git"
 echo "TF_VAR_CodestarGithubInfrastructureSCPsSource: $TF_VAR_CodestarGithubInfrastructureSCPsSource"
 
