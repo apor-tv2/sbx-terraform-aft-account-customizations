@@ -1,6 +1,6 @@
 variable "TEST" {
 	type = string
-	default = "Unset"
+#	default = "Unset"
 }
 
 output "printtestvar"{
