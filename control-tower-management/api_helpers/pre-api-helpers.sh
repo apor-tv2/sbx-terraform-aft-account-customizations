@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x -v 
 
 echo "Executing Pre-API Helpers"
 echo "Test: Pre-API Helpers"
@@ -13,19 +13,25 @@ ssh_key_parameter=$(aws ssm get-parameter --name /aft/config/aft-ssh-key --with-
 
 echo "ssh_key_parameter $ssh_key_parameter"
 
+echo "aws codestar-connections list-connections:"
+aws codestar-connections list-connections
+
 CodestarConnectionArn=$(aws codestar-connections list-connections --query 'Connections[?ConnectionName==`tv2-infrastructure-SCPs`].ConnectionArn' --output text)
 echo "CodestarConnectionArn: >$CodestarConnectionArn<"
 if [ -z "$CodestarConnectionArn" ] ; then
 	echo "CodestarConnectionArn not found"
 	exit 1;
 fi
+
 CodestarConnectionArnID=$(echo $CodestarConnectionArn | sed -e 's:.*/::')
+echo "CodestarConnectionArnID: $CodestarConnectionArnID"
 AccountID=$(aws sts get-caller-identity --query "Account" --output text)
+echo "AccountID: $AccountID"
 GithubRepo="tv2/infrastructure-SCPs"
+echo "git config --global credential.helper '!aws codecommit credential-helper $@'"
 git config --global credential.helper '!aws codecommit credential-helper $@'
+echo "git config --global credential.UseHttpPath true"
 git config --global credential.UseHttpPath true
-# add --quiet
-git clone -b https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $CUSTOMIZATION/modules/infrastructure-SCPs
 find $DEFAULT_PATH/$CUSTOMIZATION
 echo "DEFAULT_PATH $DEFAULT_PATH"
 echo "VENDED_ACCOUNT_ID $VENDED_ACCOUNT_ID"
@@ -41,6 +47,6 @@ echo "VENDED_EXEC_ROLE_ARN $VENDED_EXEC_ROLE_ARN"
 echo "AFT_ADMIN_ROLE_NAME $AFT_ADMIN_ROLE_NAME"
 echo "AFT_ADMIN_ROLE_ARN $AFT_ADMIN_ROLE_ARN"
 echo "ROLE_SESSION_NAME $ROLE_SESSION_NAME"
-#git clone --quiet -b $AWS_MODULE_GIT_REF $AWS_MODULE_SOURCE aws-aft-core-framework
-
+echo "git clone --quiet -b https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/infrastructure-SCPs"
+git clone --quiet -b https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/infrastructure-SCPs
 
