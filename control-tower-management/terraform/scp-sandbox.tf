@@ -1,5 +1,5 @@
 module "scp-sbx-sandbox" {
-	source = var.CodestarGithubInfrastructureSCPsSource
+	source = "${var.CodestarGithubInfrastructureSCPsSource}"
 	#source = "git::https://git@github.com/tv2/infrastructure-SCPs.git?ref=v1.0.1"
 	#source = "git::https://git@github.com/tv2/infrastructure-SCPs.git"
 
