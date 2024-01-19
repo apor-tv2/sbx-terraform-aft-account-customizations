@@ -57,4 +57,4 @@ export TF_VAR_CodestarGithubInfrastructureSCPsSource="https://codestar-connectio
 echo "TF_VAR_CodestarGithubInfrastructureSCPsSource: $TF_VAR_CodestarGithubInfrastructureSCPsSource"
 
 export TF_VAR_TEST="TF_VAR_TEST_SET_FROM_PRE_API_HELPERS"
-echo "TEST=TF_VAR_TEST_SET_FROM_PRE_API_HELPERS" >> $DEFAULT_PATH/$CUSTOMIZATION/terraform/config.auto.tfvars
+echo "TEST=\"TF_VAR_TEST_SET_FROM_PRE_API_HELPERS\"" >> $DEFAULT_PATH/$CUSTOMIZATION/terraform/config.auto.tfvars
