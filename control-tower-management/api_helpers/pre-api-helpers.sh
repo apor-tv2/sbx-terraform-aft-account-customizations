@@ -73,4 +73,5 @@ echo "ROLE_SESSION_NAME $ROLE_SESSION_NAME"
 #}
 #INJECT_CODESTAR_CONNECTION_INFO 
 
-echo "CodestarGithubInfrastructureSCPsSource=\"https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git\"" >> $DEFAULT_PATH/$CUSTOMIZATION/terraform/config.auto.tfvars
+CodestarGithubInfrastructureSCPsSource="https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git"
+find $DEFAULT_PATH/$CUSTOMIZATION/ -type f -name "*.tf" -exec sed -i "s:REPLACECodestarGithubInfrastructureSCPsSourceREPLACE:$CodestarGithubInfrastructureSCPsSource:" {} \;

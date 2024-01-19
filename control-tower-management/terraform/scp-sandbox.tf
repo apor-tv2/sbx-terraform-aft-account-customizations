@@ -1,9 +1,9 @@
-variable "CodestarGithubInfrastructureSCPsSource" {
-	type = string
-}
+#variable "CodestarGithubInfrastructureSCPsSource" {
+#	type = string
+#}
 
 module "scp-sbx-sandbox" {
-	source = "${var.CodestarGithubInfrastructureSCPsSource}"
+	source = "REPLACECodestarGithubInfrastructureSCPsSourceREPLACE"
 	#source = "git::https://git@github.com/tv2/infrastructure-SCPs.git?ref=v1.0.1"
 	#source = "git::https://git@github.com/tv2/infrastructure-SCPs.git"
 
