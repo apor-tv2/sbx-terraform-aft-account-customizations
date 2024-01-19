@@ -50,8 +50,12 @@ echo "AFT_ADMIN_ROLE_NAME $AFT_ADMIN_ROLE_NAME"
 echo "AFT_ADMIN_ROLE_ARN $AFT_ADMIN_ROLE_ARN"
 echo "ROLE_SESSION_NAME $ROLE_SESSION_NAME"
 
+CodestarGithubInfrastructureSCPsSource="https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git"
 #echo "git clone --quiet -b https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/infrastructure-SCPs"
 #git clone --quiet -b https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/infrastructure-SCPs
+echo git clone --quiet -b $CodestarGithubInfrastructureSCPsSource $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/
+git clone --quiet -b $CodestarGithubInfrastructureSCPsSource $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/
+find $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/ -type f -name "*.tf"
 
 #export TF_VAR_CodestarGithubInfrastructureSCPsSource="https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git"
 #echo "TF_VAR_CodestarGithubInfrastructureSCPsSource: $TF_VAR_CodestarGithubInfrastructureSCPsSource"
@@ -73,5 +77,4 @@ echo "ROLE_SESSION_NAME $ROLE_SESSION_NAME"
 #}
 #INJECT_CODESTAR_CONNECTION_INFO 
 
-CodestarGithubInfrastructureSCPsSource="https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git"
-find $DEFAULT_PATH/$CUSTOMIZATION/ -type f -name "*.tf" -exec sed -i "s:REPLACECodestarGithubInfrastructureSCPsSourceREPLACE:$CodestarGithubInfrastructureSCPsSource:" {} \;
+#find $DEFAULT_PATH/$CUSTOMIZATION/ -type f -name "*.tf" -exec sed -i "s:REPLACECodestarGithubInfrastructureSCPsSourceREPLACE:$CodestarGithubInfrastructureSCPsSource:" {} \;
