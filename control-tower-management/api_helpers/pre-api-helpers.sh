@@ -1,4 +1,6 @@
-#!/bin/bash -x -v 
+#!/bin/bash 
+set -x
+set -v
 
 echo "Executing Pre-API Helpers"
 echo "Test: Pre-API Helpers"
@@ -49,4 +51,5 @@ echo "AFT_ADMIN_ROLE_ARN $AFT_ADMIN_ROLE_ARN"
 echo "ROLE_SESSION_NAME $ROLE_SESSION_NAME"
 echo "git clone --quiet -b https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/infrastructure-SCPs"
 git clone --quiet -b https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/infrastructure-SCPs
+export TF_VAR_CodestarGithubInfrastructureSCPsSource="https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git"
 
