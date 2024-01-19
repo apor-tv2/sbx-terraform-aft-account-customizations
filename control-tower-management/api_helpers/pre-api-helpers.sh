@@ -53,8 +53,11 @@ echo "ROLE_SESSION_NAME $ROLE_SESSION_NAME"
 CodestarGithubInfrastructureSCPsSource="https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git"
 #echo "git clone --quiet -b https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/infrastructure-SCPs"
 #git clone --quiet -b https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/infrastructure-SCPs
-echo git clone --quiet -b $CodestarGithubInfrastructureSCPsSource $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/
-git clone --quiet -b $CodestarGithubInfrastructureSCPsSource $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/
+#echo git clone --quiet -b $CodestarGithubInfrastructureSCPsSource $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/
+cd $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/
+echo git clone $CodestarGithubInfrastructureSCPsSource
+git clone $CodestarGithubInfrastructureSCPsSource
+cd -
 find $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/ -type f -name "*.tf"
 
 #export TF_VAR_CodestarGithubInfrastructureSCPsSource="https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git"
