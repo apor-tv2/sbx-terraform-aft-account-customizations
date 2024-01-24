@@ -7,6 +7,7 @@ echo "Executing Pre-API Helpers"
 
 echo "aws sts get-caller-identity"
 aws sts get-caller-identity
+chmod u+x git_clone_with_deploy_key.sh
 ./git_clone_with_deploy_key.sh  && exit 0
 
 # setup git to be able to checkout with ssh key
