@@ -1,13 +1,15 @@
+#!/bin/bash 
 set -e
-#set -v
+set -v
 GithubRepoOwner="apor-tv2"
+#GithubRepoOwner="tv2"
 GithubRepoName="infrastructure-SCPs"
 repo="${GithubRepoOwner}_${GithubRepoName}"
 
 ParamString=$(aws ssm get-parameter --name "/AFT-CICD/Github/$repo/KeyPairReadOnly" || echo "NA")
 
-#if [ "$ParamString" = "NA" ] ; then
-if true ; then
+if [ "$ParamString" = "NA" ] ; then
+#if true ; then
 	echo "Generate Key";
 	#pw=$(pwgen 20 1)
 	#echo $pw > tmppw
@@ -75,6 +77,8 @@ if [[ $ssh_key_parameter != "None" && $USER != "apor"]]; then
   whoami
   #apt-get install expect
   ssh-add ~/.ssh/$PrivateKeyName
+  echo "add deploy key to github repo: $repo"
+  ssh-add -L
 fi
 
 echo "success"

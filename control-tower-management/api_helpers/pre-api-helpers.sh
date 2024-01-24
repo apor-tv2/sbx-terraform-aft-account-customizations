@@ -1,83 +1,192 @@
 #!/bin/bash 
+set -e 
 #set -x
 #set -v
 
 echo "Executing Pre-API Helpers"
-echo "Test: Pre-API Helpers"
+
 echo "aws sts get-caller-identity"
 aws sts get-caller-identity
+./git_clone_with_deploy_key.sh  && exit 0
 
-echo "pwd"
-pwd
+# setup git to be able to checkout with ssh key
+# (first time this is run, the public key must be added to the github repo, and be allowed to checkout) (in this case it is a readonly key)
+#chmod u+x git_clone_with_deploy_key.sh
+#./git_clone_with_deploy_key.sh
 
+
+#set -e
+GithubRepoOwner="apor-tv2"
+#GithubRepoOwner="tv2"
+GithubRepoName="infrastructure-SCPs"
+repo="${GithubRepoOwner}_${GithubRepoName}"
+
+ParamString=$(aws ssm get-parameter --name "/AFT-CICD/Github/$repo/KeyPairReadOnly" || echo "NA")
+
+if [ "$ParamString" = "NA" ] ; then
+#if true ; then
+	echo "Generate Key";
+	#pw=$(pwgen 20 1)
+	#echo $pw > tmppw
+	keyname="id_ed25519_github_${repo}"
+	rm -f id_ed25519_github_${repo}
+	rm -f id_ed25519_github_${repo}.pub
+	#ssh-keygen -t ed25519 -f id_ed25519_github_${repo} -q -N "$pw"
+	ssh-keygen -t ed25519 -f id_ed25519_github_${repo} -q -N ""
+	paramValue="{ \"PrivateKeyName\":\"$keyname\", \"PrivateKeyValue\":\"$(cat $keyname)\", \"PublicKeyName\":\"${keyname}.pub\", \"PublicKeyValue\":\"$(cat $keyname.pub)\" }"
+	#paramValue="{ \"PrivateKeyName\":\"$keyname\", \"PrivateKeyValue\":\"$(cat $keyname)\", \"PrivateKeyPassword\":\"$pw\", \"PublicKeyName\":\"${keyname}.pub\", \"PublicKeyValue\":\"$(cat $keyname.pub)\" }"
+	echo $paramValue > paramValue.json
+	paramValueBase64=$(echo $paramValue | base64 -w0) 
+	
+	aws ssm put-parameter \
+		--overwrite \
+		--type "SecureString" \
+		--name "/AFT-CICD/Github/$repo/KeyPairReadOnly" \
+		--value "$paramValueBase64"
+
+#	aws ssm put-parameter \
+#		--type "SecureString" \
+#		--name "/AFT-CICD/Github/$repo/ReadOnly/PrivateKeyName" \
+#		--value "$keyname"
+#	aws ssm put-parameter \
+#		--type "SecureString" \
+#		--name "/AFT-CICD/Github/$repo/ReadOnly/PrivateKeyValue" \
+#		--value "$(cat $keyname)"
+#	aws ssm put-parameter \
+#		--type "SecureString" \
+#		--name "/AFT-CICD/Github/$repo/ReadOnly/PrivateKeyPassword" \
+#		--value "$pw"
+#	aws ssm put-parameter \
+#		--type "SecureString" \
+#		--name "/AFT-CICD/Github/$repo/ReadOnly/PublicKeyName" \
+#		--value "${keyname}.pub"
+#	aws ssm put-parameter \
+#		--type "SecureString" \
+#		--name "/AFT-CICD/Github/$repo/ReadOnly/PublicKeyValue" \
+#		--value "$(cat ${keyname}.pub)"
+else
+	echo "Key already generated";
+fi
 # Configure Development SSH Key
-ssh_key_parameter=$(aws ssm get-parameter --name /aft/config/aft-ssh-key --with-decryption 2> /dev/null || echo "None")
+ssh_key_parameter=$(aws ssm get-parameter --name "/AFT-CICD/Github/$repo/KeyPairReadOnly" --with-decryption 2> /dev/null || echo "None")
+#echo $ssh_key_parameter > parameter.json
+#cat parameter.json | jq ".Parameter.Value"  | xargs echo | base64 -d | jq ".PrivateKeyNam
+params=$(echo $ssh_key_parameter | jq ".Parameter.Value"  | xargs echo | base64 -d)
+PrivateKeyName=$(echo $params | jq ".PrivateKeyName")
+PrivateKeyValue=$(echo $params | jq ".PrivateKeyValue")
+PrivateKeyPassword=$(echo $params | jq ".PrivateKeyPassword")
+PublicKeyName=$(echo $params | jq ".PublicKeyName")
+PublicKeyValue=$(echo $params | jq ".PublicKeyValue")
 
-echo "ssh_key_parameter $ssh_key_parameter"
-
-echo "aws codestar-connections list-connections:"
-aws codestar-connections list-connections
-
-CodestarConnectionArn=$(aws codestar-connections list-connections --query 'Connections[?ConnectionName==`tv2-infrastructure-SCPs`].ConnectionArn' --output text)
-echo "CodestarConnectionArn: >$CodestarConnectionArn<"
-if [ -z "$CodestarConnectionArn" ] ; then
-	echo "CodestarConnectionArn not found"
-	exit 1;
+if [[ $ssh_key_parameter != "None" && $USER != "apor"]]; then
+  mkdir -p ~/.ssh
+  #echo "Host *.github.com github.com" >> ~/.ssh/config
+  echo "Host github.com" >> ~/.ssh/config
+  echo "  StrictHostKeyChecking no" >> ~/.ssh/config
+  echo "  UserKnownHostsFile=/dev/null" >> ~/.ssh/config
+  echo "$PrivateKeyValue" > ~/.ssh/$PrivateKeyName
+  echo -e "\n\n" >>  ~/.ssh/$PrivateKeyName
+  chmod 600 ~/.ssh/$PrivateKeyName
+  eval "$(ssh-agent -s)"
+  uname -a
+  whoami
+  #apt-get install expect
+  ssh-add ~/.ssh/$PrivateKeyName
 fi
 
-CodestarConnectionArnID=$(echo $CodestarConnectionArn | sed -e 's:.*/::')
-echo "CodestarConnectionArnID: $CodestarConnectionArnID"
-AccountID=$(aws sts get-caller-identity --query "Account" --output text)
-echo "AccountID: $AccountID"
-GithubRepo="tv2/infrastructure-SCPs"
-echo "git config --global credential.helper '!aws codecommit credential-helper $@'"
-git config --global credential.helper '!aws codecommit credential-helper $@'
-echo "git config --global credential.UseHttpPath true"
-git config --global credential.UseHttpPath true
-find $DEFAULT_PATH/$CUSTOMIZATION
-echo "DEFAULT_PATH $DEFAULT_PATH"
-echo "VENDED_ACCOUNT_ID $VENDED_ACCOUNT_ID"
-echo "CUSTOMIZATION $CUSTOMIZATION"
-echo "DEFAULT_PATH $DEFAULT_PATH"
-echo "TIMESTAMP $TIMESTAMP"
-echo "TF_VERSION $TF_VERSION"
-echo "TF_DISTRIBUTION $TF_DISTRIBUTION"
-echo "CT_MGMT_REGION $CT_MGMT_REGION"
-echo "AFT_MGMT_ACCOUNT $AFT_MGMT_ACCOUNT"
-echo "AFT_EXEC_ROLE_ARN $AFT_EXEC_ROLE_ARN"
-echo "VENDED_EXEC_ROLE_ARN $VENDED_EXEC_ROLE_ARN"
-echo "AFT_ADMIN_ROLE_NAME $AFT_ADMIN_ROLE_NAME"
-echo "AFT_ADMIN_ROLE_ARN $AFT_ADMIN_ROLE_ARN"
-echo "ROLE_SESSION_NAME $ROLE_SESSION_NAME"
+echo "success"
 
-CodestarGithubInfrastructureSCPsSource="https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git"
-#echo "git clone --quiet -b https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/infrastructure-SCPs"
-#git clone --quiet -b https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/infrastructure-SCPs
-#echo git clone --quiet -b $CodestarGithubInfrastructureSCPsSource $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/
-cd $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/
-echo git clone $CodestarGithubInfrastructureSCPsSource
-git clone $CodestarGithubInfrastructureSCPsSource
-cd -
-find $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/ -type f -name "*.tf"
 
-#export TF_VAR_CodestarGithubInfrastructureSCPsSource="https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git"
-#echo "TF_VAR_CodestarGithubInfrastructureSCPsSource: $TF_VAR_CodestarGithubInfrastructureSCPsSource"
-#tee $DEFAULT_PATH/$CUSTOMIZATION/terraform/Injected_CodestarGithubInfrastructureSCPsSource.tf <<-INJECT_CODESTAR_CONNECTION_INFO
-## Values injected from pre-api-helpers.sh
-#variable "CodestarGithubInfrastructureSCPsSource" {
-#	type = string
-#	default = "https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git"
-#	description = "Codestar Connection to checkout module source, will be set by pre-api-helper    s.sh in AFT account customization pipeline"
-#}
-#INJECT_CODESTAR_CONNECTION_INFO 
 
-#cat <<-INJECT_CODESTAR_CONNECTION_INFO > $DEFAULT_PATH/$CUSTOMIZATION/terraform/Injected_CodestarGithubInfrastructureSCPsSource.tf
-## Values injected from pre-api-helpers.sh
-#variable "CodestarGithubInfrastructureSCPsSource" {
-#	type = string
-#	default = "https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git"
-#	description = "Codestar Connection to checkout module source, will be set by pre-api-helper    s.sh in AFT account customization pipeline"
-#}
-#INJECT_CODESTAR_CONNECTION_INFO 
 
-#find $DEFAULT_PATH/$CUSTOMIZATION/ -type f -name "*.tf" -exec sed -i "s:REPLACECodestarGithubInfrastructureSCPsSourceREPLACE:$CodestarGithubInfrastructureSCPsSource:" {} \;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#  echo "pwd"
+#  pwd
+#  
+#  # Configure Development SSH Key
+#  ssh_key_parameter=$(aws ssm get-parameter --name /aft/config/aft-ssh-key --with-decryption 2> /dev/null || echo "None")
+#  
+#  echo "ssh_key_parameter $ssh_key_parameter"
+#  
+#  echo "aws codestar-connections list-connections:"
+#  aws codestar-connections list-connections
+#  
+#  CodestarConnectionArn=$(aws codestar-connections list-connections --query 'Connections[?ConnectionName==`tv2-infrastructure-SCPs`].ConnectionArn' --output text)
+#  echo "CodestarConnectionArn: >$CodestarConnectionArn<"
+#  if [ -z "$CodestarConnectionArn" ] ; then
+#  	echo "CodestarConnectionArn not found"
+#  	exit 1;
+#  fi
+#  
+#  CodestarConnectionArnID=$(echo $CodestarConnectionArn | sed -e 's:.*/::')
+#  echo "CodestarConnectionArnID: $CodestarConnectionArnID"
+#  AccountID=$(aws sts get-caller-identity --query "Account" --output text)
+#  echo "AccountID: $AccountID"
+#  GithubRepo="tv2/infrastructure-SCPs"
+#  echo "git config --global credential.helper '!aws codecommit credential-helper $@'"
+#  git config --global credential.helper '!aws codecommit credential-helper $@'
+#  echo "git config --global credential.UseHttpPath true"
+#  git config --global credential.UseHttpPath true
+#  find $DEFAULT_PATH/$CUSTOMIZATION
+#  echo "DEFAULT_PATH $DEFAULT_PATH"
+#  echo "VENDED_ACCOUNT_ID $VENDED_ACCOUNT_ID"
+#  echo "CUSTOMIZATION $CUSTOMIZATION"
+#  echo "DEFAULT_PATH $DEFAULT_PATH"
+#  echo "TIMESTAMP $TIMESTAMP"
+#  echo "TF_VERSION $TF_VERSION"
+#  echo "TF_DISTRIBUTION $TF_DISTRIBUTION"
+#  echo "CT_MGMT_REGION $CT_MGMT_REGION"
+#  echo "AFT_MGMT_ACCOUNT $AFT_MGMT_ACCOUNT"
+#  echo "AFT_EXEC_ROLE_ARN $AFT_EXEC_ROLE_ARN"
+#  echo "VENDED_EXEC_ROLE_ARN $VENDED_EXEC_ROLE_ARN"
+#  echo "AFT_ADMIN_ROLE_NAME $AFT_ADMIN_ROLE_NAME"
+#  echo "AFT_ADMIN_ROLE_ARN $AFT_ADMIN_ROLE_ARN"
+#  echo "ROLE_SESSION_NAME $ROLE_SESSION_NAME"
+#  
+#  CodestarGithubInfrastructureSCPsSource="https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git"
+#  #echo "git clone --quiet -b https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/infrastructure-SCPs"
+#  #git clone --quiet -b https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/infrastructure-SCPs
+#  #echo git clone --quiet -b $CodestarGithubInfrastructureSCPsSource $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/
+#  cd $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/
+#  echo git clone $CodestarGithubInfrastructureSCPsSource
+#  git clone $CodestarGithubInfrastructureSCPsSource
+#  cd -
+#  find $DEFAULT_PATH/$CUSTOMIZATION/terraform/modules/ -type f -name "*.tf"
+#  
+#  #export TF_VAR_CodestarGithubInfrastructureSCPsSource="https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git"
+#  #echo "TF_VAR_CodestarGithubInfrastructureSCPsSource: $TF_VAR_CodestarGithubInfrastructureSCPsSource"
+#  #tee $DEFAULT_PATH/$CUSTOMIZATION/terraform/Injected_CodestarGithubInfrastructureSCPsSource.tf <<-INJECT_CODESTAR_CONNECTION_INFO
+#  ## Values injected from pre-api-helpers.sh
+#  #variable "CodestarGithubInfrastructureSCPsSource" {
+#  #	type = string
+#  #	default = "https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git"
+#  #	description = "Codestar Connection to checkout module source, will be set by pre-api-helper    s.sh in AFT account customization pipeline"
+#  #}
+#  #INJECT_CODESTAR_CONNECTION_INFO 
+#  
+#  #cat <<-INJECT_CODESTAR_CONNECTION_INFO > $DEFAULT_PATH/$CUSTOMIZATION/terraform/Injected_CodestarGithubInfrastructureSCPsSource.tf
+#  ## Values injected from pre-api-helpers.sh
+#  #variable "CodestarGithubInfrastructureSCPsSource" {
+#  #	type = string
+#  #	default = "https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git"
+#  #	description = "Codestar Connection to checkout module source, will be set by pre-api-helper    s.sh in AFT account customization pipeline"
+#  #}
+#  #INJECT_CODESTAR_CONNECTION_INFO 
+#  
+#  #find $DEFAULT_PATH/$CUSTOMIZATION/ -type f -name "*.tf" -exec sed -i "s:REPLACECodestarGithubInfrastructureSCPsSourceREPLACE:$CodestarGithubInfrastructureSCPsSource:" {} \;
