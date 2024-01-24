@@ -12,8 +12,9 @@ module "scp-sbx-sandbox" {
 	#source = "git::https://git@github.com/apor-tv2/infrastructure-SCPs.git"
 
 	#source = "git::https://github.com/apor-tv2/infrastructure-SCPs.git"
-	#source = "git@github.com:org/module"
-	source = "./modules/infrastructure-SCPs"
+
+	source = "git@github.com:org/apor-tv2/infrastructure-SCPs.git"
+	#source = "./modules/infrastructure-SCPs"
 	targets = toset([var.ou_targets.sandbox])
 	name = "scp-sandbox"
 	# Rule 1-5
