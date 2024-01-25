@@ -8,9 +8,9 @@ echo "Executing Pre-API Helpers"
 echo "aws sts get-caller-identity"
 aws sts get-caller-identity
 pwd
-find . -name "git_clone_with_deploy_key.sh"
-chmod u+x git_clone_with_deploy_key.sh
-./git_clone_with_deploy_key.sh  && exit 0
+gitclonescriptwithpath=$(find . -name "git_clone_with_deploy_key.sh")
+chmod u+x $gitclonescriptwithpath
+$gitclonescriptwithpath && exit 0
 
 # setup git to be able to checkout with ssh key
 # (first time this is run, the public key must be added to the github repo, and be allowed to checkout) (in this case it is a readonly key)
