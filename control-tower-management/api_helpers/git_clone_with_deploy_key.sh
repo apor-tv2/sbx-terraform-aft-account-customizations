@@ -18,7 +18,7 @@ if [ "$ParamString" = "NA" ] ; then
 	rm -f id_ed25519_github_${repo}.pub
 	#ssh-keygen -t ed25519 -f id_ed25519_github_${repo} -q -N "$pw"
 	ssh-keygen -t ed25519 -f id_ed25519_github_${repo} -q -N ""
-	paramValue="{ \"PrivateKeyName\":\"$keyname\", \"PrivateKeyValue\":\"$(cat $keyname)\", \"PublicKeyName\":\"${keyname}.pub\", \"PublicKeyValue\":\"$(cat $keyname.pub)\" }"
+	paramValue="{ \"PrivateKeyName\":\"$keyname\", \"PrivateKeyValue\":\"$(cat $keyname | base64 -w0)\", \"PublicKeyName\":\"${keyname}.pub\", \"PublicKeyValue\":\"$(cat $keyname.pub | base64 -w0)\" }"
 	#paramValue="{ \"PrivateKeyName\":\"$keyname\", \"PrivateKeyValue\":\"$(cat $keyname)\", \"PrivateKeyPassword\":\"$pw\", \"PublicKeyName\":\"${keyname}.pub\", \"PublicKeyValue\":\"$(cat $keyname.pub)\" }"
 	echo $paramValue > paramValue.json
 	paramValueBase64=$(echo $paramValue | base64 -w0) 
@@ -61,13 +61,13 @@ if [[ "$ssh_key_parameter" != "None" ]]; then
   params=$(echo $ssh_key_parameter | jq ".Parameter.Value"  | xargs echo | base64 -d)
   PrivateKeyName=$(echo $params | jq ".PrivateKeyName" | sed 's:"::g')
   echo $PrivateKeyName
-  PrivateKeyValue=$(echo $params | jq ".PrivateKeyValue" | sed 's:"::g')
+  PrivateKeyValue=$(echo $params | jq ".PrivateKeyValue" | sed 's:"::g' | base64 -d)
   echo $PrivateKeyValue
   #PrivateKeyPassword=$(echo $params | jq ".PrivateKeyPassword" | sed 's:"::g')
   #echo $PrivateKeyPassword
   PublicKeyName=$(echo $params | jq ".PublicKeyName" | sed 's:"::g')
   echo $PublicKeyName
-  PublicKeyValue=$(echo $params | jq ".PublicKeyValue" | sed 's:"::g')
+  PublicKeyValue=$(echo $params | jq ".PublicKeyValue" | sed 's:"::g' | base64 -d)
   echo $PublicKeyValue
 
   # .ssh already exist in container
