@@ -63,15 +63,18 @@ if [[ "$ssh_key_parameter" != "None" ]]; then
   echo $PrivateKeyName
   PrivateKeyValue=$(echo $params | jq ".PrivateKeyValue" | sed 's:"::g')
   echo $PrivateKeyValue
-  PrivateKeyPassword=$(echo $params | jq ".PrivateKeyPassword" | sed 's:"::g')
-  echo $PrivateKeyPassword
+  #PrivateKeyPassword=$(echo $params | jq ".PrivateKeyPassword" | sed 's:"::g')
+  #echo $PrivateKeyPassword
   PublicKeyName=$(echo $params | jq ".PublicKeyName" | sed 's:"::g')
   echo $PublicKeyName
   PublicKeyValue=$(echo $params | jq ".PublicKeyValue" | sed 's:"::g')
   echo $PublicKeyValue
 
-  mkdir -p ~/.ssh
+  # .ssh already exist in container
+  #mkdir -p ~/.ssh
+  #chmod 700 ~/.ssh
   #echo "Host *.github.com github.com" >> ~/.ssh/config
+  echo -e "\n\n" >>  ~/.ssh/config
   echo "Host github.com" >> ~/.ssh/config
   echo "  StrictHostKeyChecking no" >> ~/.ssh/config
   echo "  UserKnownHostsFile=/dev/null" >> ~/.ssh/config
@@ -83,7 +86,7 @@ if [[ "$ssh_key_parameter" != "None" ]]; then
   uname -a
   whoami
   #apt-get install expect
-  ssh-add ~/.ssh/$PrivateKeyName
+  ssh-add -v ~/.ssh/$PrivateKeyName
   echo "add deploy key to github repo: $repo"
   ssh-add -L
 fi
