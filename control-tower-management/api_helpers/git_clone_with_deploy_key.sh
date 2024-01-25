@@ -63,7 +63,7 @@ PrivateKeyPassword=$(echo $params | jq ".PrivateKeyPassword")
 PublicKeyName=$(echo $params | jq ".PublicKeyName")
 PublicKeyValue=$(echo $params | jq ".PublicKeyValue")
 
-if [[ $ssh_key_parameter != "None" && $USER != "apor"]]; then
+if [[ "$ssh_key_parameter" != "None" ]]; then
   mkdir -p ~/.ssh
   #echo "Host *.github.com github.com" >> ~/.ssh/config
   echo "Host github.com" >> ~/.ssh/config
