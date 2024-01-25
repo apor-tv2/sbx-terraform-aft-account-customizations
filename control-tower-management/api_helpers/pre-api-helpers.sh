@@ -2,7 +2,8 @@
 #set -e 
 ##set -x
 ##set -v
-#
+
+
 #echo "Executing Pre-API Helpers"
 #
 #echo "aws sts get-caller-identity"
@@ -24,13 +25,15 @@ ParamString=$(aws ssm get-parameter --name "/AFT-CICD/Github/$repo/KeyPairReadOn
 if [ "$ParamString" = "NA" ] ; then
 #if true ; then
 	echo "Generate Key";
-	#pw=$(pwgen 20 1)
-	#echo $pw > tmppw
-	keyname="id_ed25519_github_${repo}"
-	rm -f id_ed25519_github_${repo}
-	rm -f id_ed25519_github_${repo}.pub
-	#ssh-keygen -t ed25519 -f id_ed25519_github_${repo} -q -N "$pw"
-	ssh-keygen -t ed25519 -f id_ed25519_github_${repo} -q -N ""
+	#keyname="id_ed25519_github_${repo}"
+	#rm -f $keyname
+	#rm -f $keyname.pub
+	#ssh-keygen -t ed25519 -f $keyname -q -N ""
+
+	keyname="id_rsa_github_${repo}"
+	rm -f $keyname
+	rm -f $keyname.pub
+	ssh-keygen -t rsa -b 2048 -f $keyname -q -N ""
 	paramValue="{ \"PrivateKeyName\":\"$keyname\", \"PrivateKeyValue\":\"$(cat $keyname | base64 -w0)\", \"PublicKeyName\":\"${keyname}.pub\", \"PublicKeyValue\":\"$(cat $keyname.pub | base64 -w0)\" }"
 	#paramValue="{ \"PrivateKeyName\":\"$keyname\", \"PrivateKeyValue\":\"$(cat $keyname)\", \"PrivateKeyPassword\":\"$pw\", \"PublicKeyName\":\"${keyname}.pub\", \"PublicKeyValue\":\"$(cat $keyname.pub)\" }"
 	echo $paramValue > paramValue.json
