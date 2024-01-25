@@ -57,11 +57,11 @@ ssh_key_parameter=$(aws ssm get-parameter --name "/AFT-CICD/Github/$repo/KeyPair
 #echo $ssh_key_parameter > parameter.json
 #cat parameter.json | jq ".Parameter.Value"  | xargs echo | base64 -d | jq ".PrivateKeyNam
 params=$(echo $ssh_key_parameter | jq ".Parameter.Value"  | xargs echo | base64 -d)
-PrivateKeyName=$(echo $params | jq ".PrivateKeyName")
-PrivateKeyValue=$(echo $params | jq ".PrivateKeyValue")
-PrivateKeyPassword=$(echo $params | jq ".PrivateKeyPassword")
-PublicKeyName=$(echo $params | jq ".PublicKeyName")
-PublicKeyValue=$(echo $params | jq ".PublicKeyValue")
+PrivateKeyName=$(echo $params | jq ".PrivateKeyName" | sed 's:"::g')
+PrivateKeyValue=$(echo $params | jq ".PrivateKeyValue" | sed 's:"::g')
+PrivateKeyPassword=$(echo $params | jq ".PrivateKeyPassword" | sed 's:"::g')
+PublicKeyName=$(echo $params | jq ".PublicKeyName" | sed 's:"::g')
+PublicKeyValue=$(echo $params | jq ".PublicKeyValue" | sed 's:"::g')
 
 if [[ "$ssh_key_parameter" != "None" ]]; then
   mkdir -p ~/.ssh
