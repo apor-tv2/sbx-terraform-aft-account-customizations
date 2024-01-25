@@ -54,16 +54,22 @@ else
 fi
 # Configure Development SSH Key
 ssh_key_parameter=$(aws ssm get-parameter --name "/AFT-CICD/Github/$repo/KeyPairReadOnly" --with-decryption 2> /dev/null || echo "None")
-#echo $ssh_key_parameter > parameter.json
-#cat parameter.json | jq ".Parameter.Value"  | xargs echo | base64 -d | jq ".PrivateKeyNam
-params=$(echo $ssh_key_parameter | jq ".Parameter.Value"  | xargs echo | base64 -d)
-PrivateKeyName=$(echo $params | jq ".PrivateKeyName" | sed 's:"::g')
-PrivateKeyValue=$(echo $params | jq ".PrivateKeyValue" | sed 's:"::g')
-PrivateKeyPassword=$(echo $params | jq ".PrivateKeyPassword" | sed 's:"::g')
-PublicKeyName=$(echo $params | jq ".PublicKeyName" | sed 's:"::g')
-PublicKeyValue=$(echo $params | jq ".PublicKeyValue" | sed 's:"::g')
 
 if [[ "$ssh_key_parameter" != "None" ]]; then
+  #echo $ssh_key_parameter > parameter.json
+  #cat parameter.json | jq ".Parameter.Value"  | xargs echo | base64 -d | jq ".PrivateKeyNam
+  params=$(echo $ssh_key_parameter | jq ".Parameter.Value"  | xargs echo | base64 -d)
+  PrivateKeyName=$(echo $params | jq ".PrivateKeyName" | sed 's:"::g')
+  echo $PrivateKeyName
+  PrivateKeyValue=$(echo $params | jq ".PrivateKeyValue" | sed 's:"::g')
+  echo $PrivateKeyValue
+  PrivateKeyPassword=$(echo $params | jq ".PrivateKeyPassword" | sed 's:"::g')
+  echo $PrivateKeyPassword
+  PublicKeyName=$(echo $params | jq ".PublicKeyName" | sed 's:"::g')
+  echo $PublicKeyName
+  PublicKeyValue=$(echo $params | jq ".PublicKeyValue" | sed 's:"::g')
+  echo $PublicKeyValue
+
   mkdir -p ~/.ssh
   #echo "Host *.github.com github.com" >> ~/.ssh/config
   echo "Host github.com" >> ~/.ssh/config
@@ -72,6 +78,7 @@ if [[ "$ssh_key_parameter" != "None" ]]; then
   echo "$PrivateKeyValue" > ~/.ssh/$PrivateKeyName
   echo -e "\n\n" >>  ~/.ssh/$PrivateKeyName
   chmod 600 ~/.ssh/$PrivateKeyName
+  cat ~/.ssh/config
   eval "$(ssh-agent -s)"
   uname -a
   whoami
