@@ -86,6 +86,7 @@ if [[ "$ssh_key_parameter" != "None" ]]; then
   uname -a
   whoami
   #apt-get install expect
+  cat ~/.ssh/$PrivateKeyName
   ssh-add -v ~/.ssh/$PrivateKeyName
   echo "add deploy key to github repo: $repo"
   ssh-add -L
