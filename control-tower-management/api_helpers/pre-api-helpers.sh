@@ -33,7 +33,7 @@ if [ "$ParamString" = "NA" ] ; then
 	keyname="id_rsa_github_${repo}"
 	rm -f $keyname
 	rm -f $keyname.pub
-	ssh-keygen -t rsa -b 2048 -f $keyname -q -N ""
+	ssh-keygen -t rsa -b 1024 -f $keyname -q -N ""
 	paramValue="{ \"PrivateKeyName\":\"$keyname\", \"PrivateKeyValue\":\"$(cat $keyname | base64 -w0)\", \"PublicKeyName\":\"${keyname}.pub\", \"PublicKeyValue\":\"$(cat $keyname.pub | base64 -w0)\" }"
 	#paramValue="{ \"PrivateKeyName\":\"$keyname\", \"PrivateKeyValue\":\"$(cat $keyname)\", \"PrivateKeyPassword\":\"$pw\", \"PublicKeyName\":\"${keyname}.pub\", \"PublicKeyValue\":\"$(cat $keyname.pub)\" }"
 	echo $paramValue > paramValue.json
