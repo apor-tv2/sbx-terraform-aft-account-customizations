@@ -1,6 +1,6 @@
 #!/bin/bash 
 set -e
-set -v
+set -x
 GithubRepoOwner="apor-tv2"
 #GithubRepoOwner="tv2"
 GithubRepoName="infrastructure-SCPs"

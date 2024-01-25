@@ -1,7 +1,7 @@
 #!/bin/bash 
 set -e 
 #set -x
-set -v
+#set -v
 
 echo "Executing Pre-API Helpers"
 
