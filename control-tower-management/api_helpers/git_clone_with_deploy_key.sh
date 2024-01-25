@@ -75,9 +75,9 @@ if [[ "$ssh_key_parameter" != "None" ]]; then
   #chmod 700 ~/.ssh
   #echo "Host *.github.com github.com" >> ~/.ssh/config
   echo -e "\n\n" >>  ~/.ssh/config
-  echo "Host github.com" >> ~/.ssh/config
-  echo "  StrictHostKeyChecking no" >> ~/.ssh/config
-  echo "  UserKnownHostsFile=/dev/null" >> ~/.ssh/config
+#  echo "Host github.com" >> ~/.ssh/config
+  echo "StrictHostKeyChecking no" >> ~/.ssh/config
+  echo "UserKnownHostsFile=/dev/null" >> ~/.ssh/config
   echo "$PrivateKeyValue" > ~/.ssh/$PrivateKeyName
   echo -e "\n\n" >>  ~/.ssh/$PrivateKeyName
   chmod 600 ~/.ssh/$PrivateKeyName
