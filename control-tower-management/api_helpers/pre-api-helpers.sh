@@ -1,12 +1,14 @@
 #!/bin/bash 
 set -e 
 #set -x
-#set -v
+set -v
 
 echo "Executing Pre-API Helpers"
 
 echo "aws sts get-caller-identity"
 aws sts get-caller-identity
+pwd
+find . -name "git_clone_with_deploy_key.sh"
 chmod u+x git_clone_with_deploy_key.sh
 ./git_clone_with_deploy_key.sh  && exit 0
 
