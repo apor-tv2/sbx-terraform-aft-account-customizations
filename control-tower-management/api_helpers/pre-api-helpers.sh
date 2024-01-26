@@ -2,6 +2,8 @@
 #set -e 
 ##set -x
 ##set -v
+./get_git_url_through_coddestar.sh
+exit 0
 
 
 #echo "Executing Pre-API Helpers"

@@ -1,7 +1,20 @@
 #!/bin/bash
-CodestarConnectionArn=$(aws codestar-connections list-connections --query 'Connections[?ConnectionName==`tv2-infrastructure-SCPs`].ConnectionArn' --output text)
-echo "CodestarConnectionArn: >$CodestarConnectionArn<"
-echo "insert this into the module source manually and commit"
+AFTStackName="SBX-AFT"
+GithubRepo="apor-tv2/infrastructure-SCPs"
+#ConnectionName=$(echo ${GithubRepo}_${AFTStackName})
+ConnectionName="apor-tv2/infra-SCPs from SBX-AFT"
+
+#AFTStackName="DEMO-AFT"
+#GithubRepo="tv2/infrastructure-SCPs"
+#ConnectionName=$(echo ${GithubRepo}_${AFTStackName})
+#
+#AFTStackName="MAIN-AFT"
+#GithubRepo="tv2/infrastructure-SCPs"
+#ConnectionName=$(echo ${GithubRepo}_${AFTStackName})
+
+AccountID=$(aws sts get-caller-identity --query "Account" --output text)
+CodestarConnectionArn=$(aws codestar-connections list-connections --query 'Connections[?ConnectionName==`'$ConnectionName'`].ConnectionArn' --output text)
+echo "https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git"
 #git config --global credential.helper '!aws codecommit credential-helper $@'
 #git config --global credential.UseHttpPath true
 #git clone https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git
