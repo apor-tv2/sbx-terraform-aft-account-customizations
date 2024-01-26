@@ -1,4 +1,5 @@
 #!/bin/bash
+exit 0
 AFTStackName="SBX-AFT"
 GithubRepo="apor-tv2/infrastructure-SCPs"
 #ConnectionName=$(echo ${GithubRepo}_${AFTStackName})
@@ -20,4 +21,3 @@ echo "https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID
 git config --global credential.helper '!aws codecommit credential-helper $@'
 git config --global credential.UseHttpPath true
 git clone https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git /tmp/testClone
-#

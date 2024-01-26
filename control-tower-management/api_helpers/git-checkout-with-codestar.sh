@@ -1,5 +1,3 @@
-echo "Exiting $0 immediately"
-exit 0
 #CodestarConnectionArn=$(aws codestar-connections list-connections --query "Connections[0].ConnectionArn" --output text)
 #CodestarConnectionArn=$(aws codestar-connections list-connections --query 'Connections[?ConnectionName==`aportv2-infrastructure-SCPs`].ConnectionArn' --output text)
 CodestarConnectionArn=$(aws codestar-connections list-connections --query 'Connections[?ConnectionName==`tv2-infrastructure-SCPs`].ConnectionArn' --output text)
