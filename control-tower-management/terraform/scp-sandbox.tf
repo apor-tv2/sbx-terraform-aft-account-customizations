@@ -18,7 +18,7 @@ module "scp-sbx-sandbox" {
 
 	#source = "git@github.com:apor-tv2/infrastructure-SCPs.git"
 	#source = "git@github.com:org/tv2/infrastructure-SCPs.git"
-	source = "https://codestar-connections.eu-central-1.amazonaws.com/git-http/352190605276/eu-central-1/2f69a125-211b-4890-8e41-813e32d9fe9e/tv2/infrastructure-SCPs.git"
+	#source = "https://codestar-connections.eu-central-1.amazonaws.com/git-http/352190605276/eu-central-1/2f69a125-211b-4890-8e41-813e32d9fe9e/tv2/infrastructure-SCPs.git"
 
 #aportv2-infrastructure-SCPs	GitHub	
 #Available
@@ -28,7 +28,7 @@ module "scp-sbx-sandbox" {
 #arn:aws:codestar-connections:eu-central-1:090836393813:connection/2f69a125-211b-4890-8e41-813e32d9fe9e
 
 
-	#source = "./modules/infrastructure-SCPs"
+	source = "./modules/infrastructure-SCPs"
 	targets = toset([var.ou_targets.sandbox])
 	name = "scp-sandbox"
 	# Rule 1-5
