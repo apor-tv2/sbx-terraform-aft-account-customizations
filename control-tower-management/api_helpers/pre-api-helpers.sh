@@ -104,6 +104,7 @@ if [[ "$ssh_key_parameter" != "None" ]]; then
   #apt-get install expect
   cat ~/.ssh/$PrivateKeyName
   ssh-add -v ~/.ssh/$PrivateKeyName
+  md5sum ~/.ssh/$PrivateKeyName*
   echo "add deploy key to github repo: $repo"
   ssh-add -L
 fi
