@@ -112,6 +112,10 @@ if [[ "$ssh_key_parameter" != "None" ]]; then
   md5sum ~/.ssh/$PrivateKeyName.pub
   echo "add deploy key to github repo: $repo"
   ssh-add -L
+  echo "git config --global credential.helper '!aws codecommit credential-helper $@'"
+  git config --global credential.helper '!aws codecommit credential-helper $@'
+  echo "git config --global credential.UseHttpPath true"
+  git config --global credential.UseHttpPath true
 fi
 
 
