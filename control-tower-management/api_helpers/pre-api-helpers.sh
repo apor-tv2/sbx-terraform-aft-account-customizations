@@ -2,7 +2,12 @@
 #set -e 
 ##set -x
 ##set -v
-./get_git_url_through_coddestar.sh
+gitclonewithcodestar=$(find . -name "git-checkout-with-codestar.sh")
+chmod u+x $gitclonewithcodestar
+$gitclonewithcodestar
+
+#chmod u+x  get_git_url_through_coddestar.sh
+#./get_git_url_through_coddestar.sh
 exit 0
 
 
