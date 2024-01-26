@@ -3,7 +3,6 @@
 #}
 
 module "scp-sbx-sandbox" {
-	source = "https://codestar-connections.eu-central-1.amazonaws.com/git-http/352190605276/eu-central-1/8114a67a-e20b-4dc4-848e-f46d536ca168/apor-tv2/infrastructure-SCPs.git"
 
 	# if using clean git urls, make sure credential.helper is set up
 	#source = "REPLACECodestarGithubInfrastructureSCPsSourceREPLACE"
@@ -17,8 +16,9 @@ module "scp-sbx-sandbox" {
 
 
 
-	source = "git@github.com:apor-tv2/infrastructure-SCPs.git"
+	#source = "git@github.com:apor-tv2/infrastructure-SCPs.git"
 	#source = "git@github.com:org/tv2/infrastructure-SCPs.git"
+	source = "https://codestar-connections.eu-central-1.amazonaws.com/git-http/352190605276/eu-central-1/8114a67a-e20b-4dc4-848e-f46d536ca168/apor-tv2/infrastructure-SCPs.git"
 
 
 
