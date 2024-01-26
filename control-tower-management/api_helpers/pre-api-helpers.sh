@@ -94,8 +94,10 @@ if [[ "$ssh_key_parameter" != "None" ]]; then
 #  echo "Host github.com" >> ~/.ssh/config
   echo "  StrictHostKeyChecking no" >> ~/.ssh/config
   echo "  UserKnownHostsFile=/dev/null" >> ~/.ssh/config
+  echo "$PublicKeyValue" > ~/.ssh/$PrivateKeyName.pub
+  chmod 600 ~/.ssh/$PrivateKeyName.pub
   echo "$PrivateKeyValue" > ~/.ssh/$PrivateKeyName
-  echo -e "\n\n" >>  ~/.ssh/$PrivateKeyName
+  #echo -e "\n\n" >>  ~/.ssh/$PrivateKeyName
   chmod 600 ~/.ssh/$PrivateKeyName
   cat ~/.ssh/config
   eval "$(ssh-agent -s)"
@@ -104,7 +106,10 @@ if [[ "$ssh_key_parameter" != "None" ]]; then
   #apt-get install expect
   cat ~/.ssh/$PrivateKeyName
   ssh-add -v ~/.ssh/$PrivateKeyName
-  md5sum ~/.ssh/$PrivateKeyName*
+  echo "md5sum ~/.ssh/$PrivateKeyName"
+  md5sum ~/.ssh/$PrivateKeyName
+  echo "md5sum ~/.ssh/$PrivateKeyName.pub"
+  md5sum ~/.ssh/$PrivateKeyName.pub
   echo "add deploy key to github repo: $repo"
   ssh-add -L
 fi
