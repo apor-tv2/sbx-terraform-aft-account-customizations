@@ -1,3 +1,4 @@
+InfrastructureSCPVersion="v1.0.0"
 #CodestarConnectionArn=$(aws codestar-connections list-connections --query "Connections[0].ConnectionArn" --output text)
 #CodestarConnectionArn=$(aws codestar-connections list-connections --query 'Connections[?ConnectionName==`aportv2-infrastructure-SCPs`].ConnectionArn' --output text)
 CodestarConnectionArn=$(aws codestar-connections list-connections --query 'Connections[?ConnectionName==`tv2-infrastructure-SCPs`].ConnectionArn' --output text)
@@ -16,7 +17,10 @@ GithubRepo="tv2/infrastructure-SCPs"
 find . -type d -name "*/modules"
 git config --global credential.helper '!aws codecommit credential-helper $@'
 git config --global credential.UseHttpPath true
-git clone https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git modules/infrastructure-SCPs
+#echo git clone https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $CUSTOMIZATION/terraform/modules/infrastructure-SCPs
+#git clone https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $CUSTOMIZATION/terraform/modules/infrastructure-SCPs
+echo git clone https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $CUSTOMIZATION/terraform/src/infrastructure-SCPs
+git clone https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $CUSTOMIZATION/terraform/src/infrastructure-SCPs
 pwd
 
 #❯ aws codestar-connections list-connections
