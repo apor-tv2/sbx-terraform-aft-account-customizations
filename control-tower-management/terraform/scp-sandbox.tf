@@ -32,7 +32,7 @@ module "scp-sbx-sandbox" {
 	# and deployed version tag is set in
 	# ../api_helpers/git-checkout-with-codestar.sh
 	#source = "./modules/infrastructure-SCPs"
-	source = "git::file:src/infrastructure-SCPs?ref=v1.0.0"
+	source = "git::file://./src/infrastructure-SCPs?ref=v1.0.0"
 	targets = toset([var.ou_targets.sandbox])
 	name = "scp-sandbox"
 	# Rule 1-5
