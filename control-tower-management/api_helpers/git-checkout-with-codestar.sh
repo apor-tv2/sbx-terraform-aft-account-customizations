@@ -19,8 +19,7 @@ git config --global credential.helper '!aws codecommit credential-helper $@'
 git config --global credential.UseHttpPath true
 #echo git clone https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $CUSTOMIZATION/terraform/modules/infrastructure-SCPs
 #git clone https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $CUSTOMIZATION/terraform/modules/infrastructure-SCPs
-echo git clone https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $CUSTOMIZATION/terraform/src/infrastructure-SCPs
-git clone https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git $CUSTOMIZATION/terraform/src/infrastructure-SCPs
+git clone https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git /tmp/infrastructure-SCPs
 pwd
 
 #❯ aws codestar-connections list-connections
