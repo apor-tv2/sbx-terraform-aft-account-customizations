@@ -19,7 +19,6 @@ git config --global credential.UseHttpPath true
 echo git clone https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git
 git clone https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git terraform/modules/infrastructure-SCPs
 pwd
-find infrastructure-SCPs
 
 #❯ aws codestar-connections list-connections
 #{
