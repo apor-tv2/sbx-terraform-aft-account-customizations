@@ -16,8 +16,7 @@ GithubRepo="tv2/infrastructure-SCPs"
 find . -type d -name "*/modules"
 git config --global credential.helper '!aws codecommit credential-helper $@'
 git config --global credential.UseHttpPath true
-echo git clone https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git
-git clone https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git terraform/modules/infrastructure-SCPs
+git clone https://codestar-connections.$AWS_REGION.amazonaws.com/git-http/$AccountID/$AWS_REGION/$CodestarConnectionArnID/$GithubRepo.git modules/infrastructure-SCPs
 pwd
 
 #❯ aws codestar-connections list-connections
