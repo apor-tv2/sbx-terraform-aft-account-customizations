@@ -4,6 +4,10 @@ variable "ou_targets" {
   default = {
 #    "development" = "ou-enen-abcd1234",
 #    "production"  = "ou-enen-abcd1236",
-    "labs"        = "ou-rzsy-6rzfb9hq"
+    "sbx_Suspended" = "ou-rzsy-u2bc3d05",
+    "sbx_security" = "ou-rzsy-lolkcqma",
+    "sbx_labs" = "ou-rzsy-6rzfb9hq",
+    "sbx_sandbox" = "ou-rzsy-wv1o09yh"
+
   }
 }

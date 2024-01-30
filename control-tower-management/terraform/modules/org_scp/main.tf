@@ -1,6 +1,6 @@
 data "aws_iam_policy_document" "scp_policy" {
 
-  # Root account access
+  # Deny All (except Control tower)
   dynamic "statement" {
     for_each = local.deny_all_except_controltowerexecution_statement
     content {
