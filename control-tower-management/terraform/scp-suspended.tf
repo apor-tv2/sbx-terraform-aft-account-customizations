@@ -1,4 +1,4 @@
-module "scp-sbx-labs" {
+module "scp-sbx-suspended" {
 	# the source dir is cloned through pre-api-helpers
 	# and deployed version tag is set here
 	# ../api_helpers/git-checkout-with-codestar.sh
