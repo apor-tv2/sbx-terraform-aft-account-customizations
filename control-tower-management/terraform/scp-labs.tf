@@ -3,7 +3,8 @@ module "scp-sbx-labs" {
 	# and deployed version tag is set here
 	# ../api_helpers/git-checkout-with-codestar.sh
 	#source = "git::file:///tmp/infrastructure-SCPs?ref=v1.0.1"
-	source = "git::file:///tmp/infrastructure-SCPs"
+	#source = "git::file:///tmp/infrastructure-SCPs"
+	source = "git@github.com:tv2/infrastructure-SCPs.git"
 	targets = toset([var.ou_targets.sbx_labs])
 	name = "scp-labs"
 	# Rule 1-5

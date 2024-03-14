@@ -1,26 +1,19 @@
 #!/bin/bash 
 set -e
 set -x
-GithubRepoOwner="apor-tv2"
-#GithubRepoOwner="tv2"
+GithubRepoOwner="tv2"
 GithubRepoName="infrastructure-SCPs"
 repo="${GithubRepoOwner}_${GithubRepoName}"
 
 ParamString=$(aws ssm get-parameter --name "/AFT-CICD/Github/$repo/KeyPairReadOnly" || echo "NA")
 
 if [ "$ParamString" = "NA" ] ; then
-#if true ; then
 	echo "Generate Key";
-	#pw=$(pwgen 20 1)
-	#echo $pw > tmppw
 	keyname="id_ed25519_github_${repo}"
 	rm -f id_ed25519_github_${repo}
 	rm -f id_ed25519_github_${repo}.pub
-	#ssh-keygen -t ed25519 -f id_ed25519_github_${repo} -q -N "$pw"
 	ssh-keygen -t ed25519 -f id_ed25519_github_${repo} -q -N ""
 	paramValue="{ \"PrivateKeyName\":\"$keyname\", \"PrivateKeyValue\":\"$(cat $keyname | base64 -w0)\", \"PublicKeyName\":\"${keyname}.pub\", \"PublicKeyValue\":\"$(cat $keyname.pub | base64 -w0)\" }"
-	#paramValue="{ \"PrivateKeyName\":\"$keyname\", \"PrivateKeyValue\":\"$(cat $keyname)\", \"PrivateKeyPassword\":\"$pw\", \"PublicKeyName\":\"${keyname}.pub\", \"PublicKeyValue\":\"$(cat $keyname.pub)\" }"
-	echo $paramValue > paramValue.json
 	paramValueBase64=$(echo $paramValue | base64 -w0) 
 	
 	aws ssm put-parameter \
@@ -29,26 +22,11 @@ if [ "$ParamString" = "NA" ] ; then
 		--name "/AFT-CICD/Github/$repo/KeyPairReadOnly" \
 		--value "$paramValueBase64"
 
-#	aws ssm put-parameter \
-#		--type "SecureString" \
-#		--name "/AFT-CICD/Github/$repo/ReadOnly/PrivateKeyName" \
-#		--value "$keyname"
-#	aws ssm put-parameter \
-#		--type "SecureString" \
-#		--name "/AFT-CICD/Github/$repo/ReadOnly/PrivateKeyValue" \
-#		--value "$(cat $keyname)"
-#	aws ssm put-parameter \
-#		--type "SecureString" \
-#		--name "/AFT-CICD/Github/$repo/ReadOnly/PrivateKeyPassword" \
-#		--value "$pw"
-#	aws ssm put-parameter \
-#		--type "SecureString" \
-#		--name "/AFT-CICD/Github/$repo/ReadOnly/PublicKeyName" \
-#		--value "${keyname}.pub"
-#	aws ssm put-parameter \
-#		--type "SecureString" \
-#		--name "/AFT-CICD/Github/$repo/ReadOnly/PublicKeyValue" \
-#		--value "$(cat ${keyname}.pub)"
+echo """
+No DeployKey was found in SSM:
+ - either update the SSM parameter (secure string) /AFT-CICD/Github/$repo/KeyPairReadOnly to an existing deploy key.
+ - or use the deploy key that has just been generated. This will require you to add it in the github repo $repo
+"""
 else
 	echo "Key already generated";
 fi
@@ -62,9 +40,7 @@ if [[ "$ssh_key_parameter" != "None" ]]; then
   PrivateKeyName=$(echo $params | jq ".PrivateKeyName" | sed 's:"::g')
   echo $PrivateKeyName
   PrivateKeyValue=$(echo $params | jq ".PrivateKeyValue" | sed 's:"::g' | base64 -d)
-  echo $PrivateKeyValue
-  #PrivateKeyPassword=$(echo $params | jq ".PrivateKeyPassword" | sed 's:"::g')
-  #echo $PrivateKeyPassword
+  #echo $PrivateKeyValue
   PublicKeyName=$(echo $params | jq ".PublicKeyName" | sed 's:"::g')
   echo $PublicKeyName
   PublicKeyValue=$(echo $params | jq ".PublicKeyValue" | sed 's:"::g' | base64 -d)
@@ -74,22 +50,26 @@ if [[ "$ssh_key_parameter" != "None" ]]; then
   #mkdir -p ~/.ssh
   #chmod 700 ~/.ssh
   #echo "Host *.github.com github.com" >> ~/.ssh/config
-  echo -e "\n\n" >>  ~/.ssh/config
-#  echo "Host github.com" >> ~/.ssh/config
-  echo "StrictHostKeyChecking no" >> ~/.ssh/config
-  echo "UserKnownHostsFile=/dev/null" >> ~/.ssh/config
+
+  if [ -f ~/.ssh/config ] ; then
+    echo -e "\n\n" >>  ~/.ssh/config
+  else
+    touch ~/.ssh/config
+  fi
+  if [ $(grep -cE "^Host github.com" ~/.ssh/config) -eq 0 ] ; then
+    # adding Host config to ssh, for github
+    echo "Host github.com" >> ~/.ssh/config
+    echo "  StrictHostKeyChecking no" >> ~/.ssh/config
+    echo "  UserKnownHostsFile=/dev/null" >> ~/.ssh/config
+    echo "  IdentityFile=~/.ssh/$PrivateKeyName" >> ~/.ssh/config
+  fi
   echo "$PrivateKeyValue" > ~/.ssh/$PrivateKeyName
-  echo -e "\n\n" >>  ~/.ssh/$PrivateKeyName
   chmod 600 ~/.ssh/$PrivateKeyName
-  cat ~/.ssh/config
+  echo "$PublicKeyName" > ~/.ssh/$PublicKeyValue
+  chmod 600 ~/.ssh/$PublicKeyName
   eval "$(ssh-agent -s)"
-  uname -a
-  whoami
-  #apt-get install expect
-  cat ~/.ssh/$PrivateKeyName
-  ssh-add -v ~/.ssh/$PrivateKeyName
-  echo "add deploy key to github repo: $repo"
-  ssh-add -L
+  #ssh-add -v ~/.ssh/$PrivateKeyName
+  #ssh-add -L
 fi
 
 echo "success"

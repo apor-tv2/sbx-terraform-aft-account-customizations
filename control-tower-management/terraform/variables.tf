@@ -1,3 +1,5 @@
+# This file may initially be generated with variables.tf.generate.sh that will produce variables.tf.generated
+
 # SCP targets - i.e. the OUs in our AWS Organization
 variable "ou_targets" {
   type = map(any)
@@ -11,3 +13,4 @@ variable "ou_targets" {
 
   }
 }
+
