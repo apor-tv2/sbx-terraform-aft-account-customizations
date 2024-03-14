@@ -38,13 +38,13 @@ if [[ "$ssh_key_parameter" != "None" ]]; then
   #cat parameter.json | jq ".Parameter.Value"  | xargs echo | base64 -d | jq ".PrivateKeyNam
   params=$(echo $ssh_key_parameter | jq ".Parameter.Value"  | xargs echo | base64 -d)
   PrivateKeyName=$(echo $params | jq ".PrivateKeyName" | sed 's:"::g')
-  echo $PrivateKeyName
+  #echo $PrivateKeyName
   PrivateKeyValue=$(echo $params | jq ".PrivateKeyValue" | sed 's:"::g' | base64 -d)
   #echo $PrivateKeyValue
   PublicKeyName=$(echo $params | jq ".PublicKeyName" | sed 's:"::g')
-  echo $PublicKeyName
+  #echo $PublicKeyName
   PublicKeyValue=$(echo $params | jq ".PublicKeyValue" | sed 's:"::g' | base64 -d)
-  echo $PublicKeyValue
+  #echo $PublicKeyValue
 
   # .ssh already exist in container
   #mkdir -p ~/.ssh
