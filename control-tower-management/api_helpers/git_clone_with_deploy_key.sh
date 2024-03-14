@@ -1,6 +1,6 @@
 #!/bin/bash 
 set -e
-set -x
+#set -x
 GithubRepoOwner="tv2"
 GithubRepoName="infrastructure-SCPs"
 repo="${GithubRepoOwner}_${GithubRepoName}"
