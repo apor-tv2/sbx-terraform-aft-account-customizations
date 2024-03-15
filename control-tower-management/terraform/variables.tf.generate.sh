@@ -14,7 +14,7 @@ echo "rootID: $rootID"
 aws organizations list-children --parent-id $rootID --child-type ORGANIZATIONAL_UNIT --output text | col2 | while read ouinfo; do
   echo "ouinfo: $ouinfo"
   ou_name_id=$(aws organizations describe-organizational-unit --organizational-unit-id $ouinfo --query "OrganizationalUnit.[Name,Id]" --output text)
-  echo $ou_name_id | sed 's/\s\+/" = "/;s/^/    "/;s/$/",/' | sed "s/\"/\"$aft_env_/" >> $outfile
+  echo $ou_name_id | sed 's/\s\+/" = "/;s/^/    "/;s/$/",/' | sed "s/\"/\"${aft_env}_/" >> $outfile
 done
 echo "  }" >> $outfile
 echo "}" >> $outfile
