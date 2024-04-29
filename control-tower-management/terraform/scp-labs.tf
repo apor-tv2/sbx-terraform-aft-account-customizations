@@ -7,7 +7,7 @@ module "scp-sbx-labs" {
 	name = "scp-labs"
 	# Rule 1-5
 	deny_all_except_controltowerexecution = false
-	deny_root_account_access     = false
+	deny_root_account_access     = true
 	deny_password_policy_changes = false
 	deny_vpn_gateway_changes     = false
 	deny_vpc_changes             = false
