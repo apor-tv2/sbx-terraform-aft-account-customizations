@@ -30,7 +30,7 @@ resource "aws_vpc" "main" {
 
 # private subnets
 data "aws_ssm_parameter" "vpc_cidr_private_AZa" {
-	name = "vpc_cidr_private_AZa" 
+	name = "${local.aft_ssm_custom_fields_prefix}/vpc_cidr_private_AZa" 
 }
 resource "aws_subnet" "private_subnet_a" {
 	#count = (length(data.aws_ssm_parameter.vpc_cidr_private_AZa.value) > 0)
@@ -42,6 +42,7 @@ resource "aws_subnet" "private_subnet_a" {
         }
 }
 data "aws_ssm_parameter" "vpc_cidr_private_AZb" {
+        name = "${local.aft_ssm_custom_fields_prefix}/vpc_cidr_private_AZb" 
 }
 resource "aws_subnet" "private_subnet_b" {
 	vpc_id = aws_vpc.main.id
@@ -52,6 +53,7 @@ resource "aws_subnet" "private_subnet_b" {
         }
 }
 data "aws_ssm_parameter" "vpc_cidr_private_AZc" {
+        name = "${local.aft_ssm_custom_fields_prefix}/vpc_cidr_private_AZc" 
 }
 resource "aws_subnet" "private_subnet_c" {
 	vpc_id = aws_vpc.main.id
