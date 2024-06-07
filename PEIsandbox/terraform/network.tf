@@ -3,7 +3,7 @@ locals {
 }
 data "aws_region" "network_current_region" {}
 output NetworkCurrentRegion {
-        value = data.aws_region.network_current_region.value
+        value = data.aws_region.network_current_region
 }
 
 data "aws_ssm_parameter" "create_vpc_and_subnets" {
