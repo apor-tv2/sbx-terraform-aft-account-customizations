@@ -12,7 +12,8 @@ output VPCCIDR {
 }
 resource "aws_vpc" "main" {
         # create the resource if create_vpc_and_subnets == "yes" and vpc_cidr is non-empty
-	count = data.aws_ssm_parameter.create_vpc_and_subnets.value == "yes" && length(data.aws_ssm_parameter.vpc_cidr.value) > 0 ? 1 : 0 )
+	#count = data.aws_ssm_parameter.create_vpc_and_subnets.value == "yes" && length(data.aws_ssm_parameter.vpc_cidr.value) > 0 ? 1 : 0 )
+	count = (data.aws_ssm_parameter.create_vpc_and_subnets.value == "yes" ? 1 : 0 )
 	cidr_block = data.aws_ssm_parameter.vpc_cidr.value
 }
 #
