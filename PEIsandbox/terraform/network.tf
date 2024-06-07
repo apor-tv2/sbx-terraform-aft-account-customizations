@@ -107,28 +107,28 @@ resource "aws_subnet" "private_subnet_a" {
 #}
 
 
-#data "aws_ssm_parameter" "vpc_cidr_private_AZb" {
-#        name = "${local.aft_ssm_custom_fields_prefix}/vpc_cidr_private_AZb" 
-#}
-#resource "aws_subnet" "private_subnet_b" {
-#	vpc_id = aws_vpc.vpc.id
-#	cidr_block = data.aws_ssm_parameter.vpc_cidr_private_AZb.value
-#        availability_zone = "${data.aws_region.current}b"
-#        lifecycle {
-#                ignore_changes = [tags]
-#        }
-#}
-#data "aws_ssm_parameter" "vpc_cidr_private_AZc" {
-#        name = "${local.aft_ssm_custom_fields_prefix}/vpc_cidr_private_AZc" 
-#}
-#resource "aws_subnet" "private_subnet_c" {
-#	vpc_id = aws_vpc.vpc.id
-#	cidr_block = data.aws_ssm_parameter.vpc_cidr_private_AZc.value
-#        availability_zone = "${data.aws_region.current}c"
-#        lifecycle {
-#                ignore_changes = [tags]
-#        }
-#}
+data "aws_ssm_parameter" "vpc_cidr_private_AZb" {
+        name = "${local.aft_ssm_custom_fields_prefix}/vpc_cidr_private_AZb" 
+}
+resource "aws_subnet" "private_subnet_b" {
+	vpc_id = aws_vpc.vpc.id
+	cidr_block = data.aws_ssm_parameter.vpc_cidr_private_AZb.value
+  availability_zone = "${data.aws_region.current}b"
+  lifecycle {
+    ignore_changes = [tags]
+  }
+}
+data "aws_ssm_parameter" "vpc_cidr_private_AZc" {
+  name = "${local.aft_ssm_custom_fields_prefix}/vpc_cidr_private_AZc" 
+}
+resource "aws_subnet" "private_subnet_c" {
+	vpc_id = aws_vpc.vpc.id
+	cidr_block = data.aws_ssm_parameter.vpc_cidr_private_AZc.value
+    availability_zone = "${data.aws_region.current}c"
+    lifecycle {
+      ignore_changes = [tags]
+    }
+}
 
 
 
