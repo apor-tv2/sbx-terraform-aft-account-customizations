@@ -1,6 +1,9 @@
 locals {
         aft_ssm_custom_fields_prefix = "/aft/account-request/custom-fields"
 }
+data "aws_ssm_parameter" "create_vpc_and_subnets" {
+	name = "${local.aft_ssm_custom_fields_prefix}/create_vpc_and_subnets"
+}
 data "aws_ssm_parameter" "vpc_cidr" {
 	name = "${local.aft_ssm_custom_fields_prefix}/vpc_cidr"
 }
@@ -8,7 +11,8 @@ output VPCCIDR {
         value = data.aws_ssm_parameter.vpc_cidr.value
 }
 resource "aws_vpc" "main" {
-	count = (length(data.aws_ssm_parameter.vpc_cidr.value) > 0)
+        # create the resource if create_vpc_and_subnets == "yes" and vpc_cidr is non-empty
+	count = data.aws_ssm_parameter.create_vpc_and_subnets.value == "yes" && length(data.aws_ssm_parameter.vpc_cidr.value) > 0 ? 1 : 0 )
 	cidr_block = data.aws_ssm_parameter.vpc_cidr.value
 }
 #
