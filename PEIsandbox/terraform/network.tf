@@ -113,7 +113,7 @@ data "aws_ssm_parameter" "vpc_cidr_private_AZb" {
 resource "aws_subnet" "private_subnet_b" {
 	vpc_id = aws_vpc.vpc.id
 	cidr_block = data.aws_ssm_parameter.vpc_cidr_private_AZb.value
-  availability_zone = "${data.aws_region.current}b"
+  availability_zone = "${data.aws_region.current.id}b"
   lifecycle {
     ignore_changes = [tags]
   }
@@ -124,7 +124,7 @@ data "aws_ssm_parameter" "vpc_cidr_private_AZc" {
 resource "aws_subnet" "private_subnet_c" {
 	vpc_id = aws_vpc.vpc.id
 	cidr_block = data.aws_ssm_parameter.vpc_cidr_private_AZc.value
-    availability_zone = "${data.aws_region.current}c"
+    availability_zone = "${data.aws_region.current.id}c"
     lifecycle {
       ignore_changes = [tags]
     }
