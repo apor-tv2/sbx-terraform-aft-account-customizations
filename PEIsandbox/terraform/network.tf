@@ -2,7 +2,7 @@ locals {
         aft_ssm_custom_fields_prefix = "/aft/account-request/custom-fields"
 }
 data "aws_region" "network_current_region" {}
-output "NetworkCurrentRegion" {
+output NetworkCurrentRegion {
         output = data.aws_region.network_current_region.value
 }
 
