@@ -52,9 +52,9 @@ variable "sso_hoejste_permission_set" {
 }
 
 
-data "aws_region" "network_current_region" {}
+data "aws_region" "current" {}
 output NetworkCurrentRegion {
-        value = data.aws_region.network_current_region
+        value = data.aws_region.current
 }
 
 data "aws_ssm_parameter" "create_vpc_and_subnets" {
@@ -97,7 +97,7 @@ data "aws_ssm_parameter" "vpc_cidr_private_AZa" {
 resource "aws_subnet" "private_subnet_a" {
 	vpc_id = aws_vpc.vpc.id
 	cidr_block = data.aws_ssm_parameter.vpc_cidr_private_AZa.value
-  availability_zone = "${data.aws_region.network_current_region.id}a"
+  availability_zone = "${data.aws_region.current.id}a"
   lifecycle {
           ignore_changes = [tags]
   }
@@ -113,7 +113,7 @@ resource "aws_subnet" "private_subnet_a" {
 #resource "aws_subnet" "private_subnet_b" {
 #	vpc_id = aws_vpc.vpc.id
 #	cidr_block = data.aws_ssm_parameter.vpc_cidr_private_AZb.value
-#        availability_zone = "${data.aws_region.network_current_region}b"
+#        availability_zone = "${data.aws_region.current}b"
 #        lifecycle {
 #                ignore_changes = [tags]
 #        }
@@ -124,7 +124,7 @@ resource "aws_subnet" "private_subnet_a" {
 #resource "aws_subnet" "private_subnet_c" {
 #	vpc_id = aws_vpc.vpc.id
 #	cidr_block = data.aws_ssm_parameter.vpc_cidr_private_AZc.value
-#        availability_zone = "${data.aws_region.network_current_region}c"
+#        availability_zone = "${data.aws_region.current}c"
 #        lifecycle {
 #                ignore_changes = [tags]
 #        }
