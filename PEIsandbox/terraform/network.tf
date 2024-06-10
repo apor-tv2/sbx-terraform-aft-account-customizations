@@ -110,10 +110,6 @@ resource "aws_subnet" "public_subnets" {
         cidr_block = local.public_subnet_cidrs[count.index]
         availability_zone = "${data.aws_region.current.id}${local.subnet_letter[count.index]}"
 }
-output "public_VPC_CIDRs" {
-        value = local.public_subnet_cidrs
-        sensitive = false
-}
 data "aws_ssm_parameter" "vpc_cidr_public_AZb" {
   name = "${local.aft_ssm_custom_fields_prefix}/vpc_cidr_public_AZb" 
 }
