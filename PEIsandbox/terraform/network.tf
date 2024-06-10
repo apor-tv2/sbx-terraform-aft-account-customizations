@@ -39,6 +39,10 @@ locals {
   subnet_letter = ["a", "b", "c"]
   availability_zone = ["${data.aws_region.current.id}a", "${data.aws_region.current.id}b", "${data.aws_region.current.id}c"]
   aft_ssm_custom_fields_prefix = "/aft/account-request/custom-fields"
+  public_subnet_cidrs = [
+	"${data.aws_ssm_parameter.vpc_cidr_public_AZa.value}",
+	"${data.aws_ssm_parameter.vpc_cidr_public_AZb.value}",
+	"${data.aws_ssm_parameter.vpc_cidr_public_AZc.value}"]
 }
 
 variable "sso_hoejste_permission_set" {                                                            
@@ -137,27 +141,33 @@ resource "aws_subnet" "private_subnet_c" {
 data "aws_ssm_parameter" "vpc_cidr_public_AZa" {
   name = "${local.aft_ssm_custom_fields_prefix}/vpc_cidr_public_AZa" 
 }
-resource "aws_subnet" "public_subnet_a" {
-	vpc_id = aws_vpc.vpc.id
-	cidr_block = data.aws_ssm_parameter.vpc_cidr_public_AZa.value
-  availability_zone = "${data.aws_region.current.id}a"
-}
+#resource "aws_subnet" "public_subnet_a" {
+#        count = length(local.public_subnet_cidrs)
+#	vpc_id = aws_vpc.vpc.id
+#	cidr_block = local.public_subnet_cidrs[count.index]
+#  availability_zone = "${data.aws_region.current.id}${local.subnet_letters[count.index]}"
+#}
+#resource "aws_subnet" "public_subnet_a" {
+#	vpc_id = aws_vpc.vpc.id
+#	cidr_block = data.aws_ssm_parameter.vpc_cidr_public_AZa.value
+#  availability_zone = "${data.aws_region.current.id}a"
+#}
 data "aws_ssm_parameter" "vpc_cidr_public_AZb" {
   name = "${local.aft_ssm_custom_fields_prefix}/vpc_cidr_public_AZb" 
 }
-resource "aws_subnet" "public_subnet_b" {
-	vpc_id = aws_vpc.vpc.id
-	cidr_block = data.aws_ssm_parameter.vpc_cidr_public_AZb.value
-  availability_zone = "${data.aws_region.current.id}b"
-}
+#resource "aws_subnet" "public_subnet_b" {
+#	vpc_id = aws_vpc.vpc.id
+#	cidr_block = data.aws_ssm_parameter.vpc_cidr_public_AZb.value
+#  availability_zone = "${data.aws_region.current.id}b"
+#}
 data "aws_ssm_parameter" "vpc_cidr_public_AZc" {
   name = "${local.aft_ssm_custom_fields_prefix}/vpc_cidr_public_AZc" 
 }
-resource "aws_subnet" "public_subnet_c" {
-	vpc_id = aws_vpc.vpc.id
-	cidr_block = data.aws_ssm_parameter.vpc_cidr_public_AZc.value
-  availability_zone = "${data.aws_region.current.id}c"
-}
+#resource "aws_subnet" "public_subnet_c" {
+#	vpc_id = aws_vpc.vpc.id
+#	cidr_block = data.aws_ssm_parameter.vpc_cidr_public_AZc.value
+#  availability_zone = "${data.aws_region.current.id}c"
+#}
 
 
 
