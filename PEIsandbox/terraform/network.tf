@@ -141,11 +141,14 @@ resource "aws_subnet" "private_subnet_c" {
 data "aws_ssm_parameter" "vpc_cidr_public_AZa" {
   name = "${local.aft_ssm_custom_fields_prefix}/vpc_cidr_public_AZa" 
 }
-resource "aws_subnet" "public_subnet_a" {
+resource "aws_subnet" "public_subnets" {
         count = length(local.public_subnet_cidrs)
-	vpc_id = aws_vpc.vpc.id
-	cidr_block = local.public_subnet_cidrs[count.index]
-  availability_zone = "${data.aws_region.current.id}${local.subnet_letter[count.index]}"
+        vpc_id = aws_vpc.vpc.id
+        cidr_block = local.public_subnet_cidrs[count.index]
+        availability_zone = "${data.aws_region.current.id}${local.subnet_letter[count.index]}"
+}
+output "public_VPC_CIDRs" {
+        value = local.public_subnet_cidrs
 }
 #resource "aws_subnet" "public_subnet_a" {
 #	vpc_id = aws_vpc.vpc.id
