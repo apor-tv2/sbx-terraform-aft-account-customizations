@@ -144,7 +144,7 @@ data "aws_ssm_parameter" "vpc_cidr_public_AZa" {
 resource "aws_subnet" "public_subnet_a" {
         count = length(local.public_subnet_cidrs)
 	vpc_id = aws_vpc.vpc.id
-	cidr_block = local.public_subnet_cidrs[count.index]t
+	cidr_block = local.public_subnet_cidrs[count.index]
   availability_zone = "${data.aws_region.current.id}${local.subnet_letters[count.index]}"
 }
 #resource "aws_subnet" "public_subnet_a" {
