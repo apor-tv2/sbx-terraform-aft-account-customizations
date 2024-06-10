@@ -1,40 +1,3 @@
-variable "tg_in_region" {
-    type = map
-    default = {
-        eu-central-1    = "tgw-0c7da5d42d66e93c5"
-        eu-north-1      = "tgw-0ad009b8785b58ed0"
-    }
-}
-
-variable "tg_rt" {
-    type = map
-        default = {
-            eu-central-1 = {
-             prod           = "tgw-rtb-0617e82ee238231cd"
-             stage          = "tgw-rtb-08e760e4ef7aae3b3"
-             dev            = "tgw-rtb-038a6037599eeb815"
-             shared         = "tgw-rtb-0da86508731a17f51"
-             internal_test  = "tgw-rtb-09f15a8d37881d73b"
-             tv_prod        = "tgw-rtb-0bcf8130ecfe705d5"
-            }
-
-            eu-north-1 = {
-             prod           = "tgw-rtb-0d9f213d213027e14"
-             stage          = "tgw-rtb-03bbd24b770c42151"
-             dev            = "tgw-rtb-04a4f1c76105b3690"
-             shared         = "tgw-rtb-0a8abca644e28b95e"
-             tv_prod        = "tgw-rtb-0de7dac9bfcccfdd9"
-            }
-        }
-}
-
-variable "tg_ram_name" {
-    type = map
-    default = {
-        eu-central-1    = "Share Transitgateway Frankfurt"
-        eu-north-1      = "Share Transitgateway Stockholm"
-    }
-}
 locals {
   subnet_letter = ["a", "b", "c"]
   availability_zone = ["${data.aws_region.current.id}a", "${data.aws_region.current.id}b", "${data.aws_region.current.id}c"]
@@ -149,28 +112,15 @@ resource "aws_subnet" "public_subnets" {
 }
 output "public_VPC_CIDRs" {
         value = local.public_subnet_cidrs
+        sensitive = false
 }
-#resource "aws_subnet" "public_subnet_a" {
-#	vpc_id = aws_vpc.vpc.id
-#	cidr_block = data.aws_ssm_parameter.vpc_cidr_public_AZa.value
-#  availability_zone = "${data.aws_region.current.id}a"
-#}
 data "aws_ssm_parameter" "vpc_cidr_public_AZb" {
   name = "${local.aft_ssm_custom_fields_prefix}/vpc_cidr_public_AZb" 
 }
-#resource "aws_subnet" "public_subnet_b" {
-#	vpc_id = aws_vpc.vpc.id
-#	cidr_block = data.aws_ssm_parameter.vpc_cidr_public_AZb.value
-#  availability_zone = "${data.aws_region.current.id}b"
-#}
 data "aws_ssm_parameter" "vpc_cidr_public_AZc" {
   name = "${local.aft_ssm_custom_fields_prefix}/vpc_cidr_public_AZc" 
 }
-#resource "aws_subnet" "public_subnet_c" {
-#	vpc_id = aws_vpc.vpc.id
-#	cidr_block = data.aws_ssm_parameter.vpc_cidr_public_AZc.value
-#  availability_zone = "${data.aws_region.current.id}c"
-#}
+
 #resource "aws_route_table" "rt_publc" {
 #        count = length(local.public_subnet_cidrs)
 #        vpc_id = aws_vpc.vpc.id
@@ -180,7 +130,47 @@ data "aws_ssm_parameter" "vpc_cidr_public_AZc" {
 #}
 
 
-## transit gateway connections
+##################################################
+## TRANSIT GATEWAY CONNECTION                   ##
+##################################################
+
+variable "tg_in_region" {
+    type = map
+    default = {
+        eu-central-1    = "tgw-0c7da5d42d66e93c5"
+        eu-north-1      = "tgw-0ad009b8785b58ed0"
+    }
+}
+
+variable "tg_rt" {
+    type = map
+        default = {
+            eu-central-1 = {
+             prod           = "tgw-rtb-0617e82ee238231cd"
+             stage          = "tgw-rtb-08e760e4ef7aae3b3"
+             dev            = "tgw-rtb-038a6037599eeb815"
+             shared         = "tgw-rtb-0da86508731a17f51"
+             internal_test  = "tgw-rtb-09f15a8d37881d73b"
+             tv_prod        = "tgw-rtb-0bcf8130ecfe705d5"
+            }
+
+            eu-north-1 = {
+             prod           = "tgw-rtb-0d9f213d213027e14"
+             stage          = "tgw-rtb-03bbd24b770c42151"
+             dev            = "tgw-rtb-04a4f1c76105b3690"
+             shared         = "tgw-rtb-0a8abca644e28b95e"
+             tv_prod        = "tgw-rtb-0de7dac9bfcccfdd9"
+            }
+        }
+}
+
+variable "tg_ram_name" {
+    type = map
+    default = {
+        eu-central-1    = "Share Transitgateway Frankfurt"
+        eu-north-1      = "Share Transitgateway Stockholm"
+    }
+}
 #data "aws_ec2_transit_gateway_route_table" "target_routetable_dev"
 
 
