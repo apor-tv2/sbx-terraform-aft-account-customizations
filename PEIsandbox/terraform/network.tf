@@ -145,7 +145,7 @@ resource "aws_subnet" "public_subnet_a" {
         count = length(local.public_subnet_cidrs)
 	vpc_id = aws_vpc.vpc.id
 	cidr_block = local.public_subnet_cidrs[count.index]
-  availability_zone = "${data.aws_region.current.id}${local.subnet_letters[count.index]}"
+  availability_zone = "${data.aws_region.current.id}${local.subnet_letter[count.index]}"
 }
 #resource "aws_subnet" "public_subnet_a" {
 #	vpc_id = aws_vpc.vpc.id
@@ -168,6 +168,18 @@ data "aws_ssm_parameter" "vpc_cidr_public_AZc" {
 #	cidr_block = data.aws_ssm_parameter.vpc_cidr_public_AZc.value
 #  availability_zone = "${data.aws_region.current.id}c"
 #}
+#resource "aws_route_table" "rt_publc" {
+#        count = length(local.public_subnet_cidrs)
+#        vpc_id = aws_vpc.vpc.id
+#        tags = {
+#                Name = "RT public subnet ${local.subnet_letter[count.index]}"
+#        }
+#}
+
+
+## transit gateway connections
+#data "aws_ec2_transit_gateway_route_table" "target_routetable_dev"
+
 
 
 
